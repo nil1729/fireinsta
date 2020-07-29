@@ -10,6 +10,7 @@ const App = ({ loadUser }) => {
 	useEffect(() => {
 		loadUser();
 		console.log('root');
+		// eslint-disable-next-line
 	}, []);
 	return (
 		<Router>
