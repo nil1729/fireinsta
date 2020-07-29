@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase, { provider } from '../firebase/firebaseApp';
 import { connect } from 'react-redux';
@@ -74,7 +74,7 @@ const useStyles = makeStyles(theme => ({
 const SignIn = ({ authState: { isAuthenticated } }) => {
 	const classes = useStyles();
 	const history = useHistory();
-	const [mode, setMode] = useState('login');
+	const [mode, setMode] = useState('register');
 	const [userInput, setUserInput] = useState({
 		email: '',
 		password: '',
