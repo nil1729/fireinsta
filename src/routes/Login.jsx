@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase, { provider } from '../firebase/firebaseApp';
 import { connect } from 'react-redux';
@@ -75,6 +75,10 @@ const SignIn = ({ authState: { isAuthenticated } }) => {
 	const classes = useStyles();
 	const history = useHistory();
 	const [mode, setMode] = useState('login');
+	const [userInput, setUserInput] = useState({
+		email: '',
+		password: '',
+	});
 	useEffect(() => {
 		if (isAuthenticated) {
 			history.push('/');
@@ -92,6 +96,25 @@ const SignIn = ({ authState: { isAuthenticated } }) => {
 			console.log(e);
 		}
 	};
+	const onChange = e => {
+		setUserInput({
+			...userInput,
+			[e.target.name]: e.target.value,
+		});
+	};
+	const handleSubmit = async e => {
+		e.preventDefault();
+		const { email, password } = userInput;
+		try {
+			if (mode === 'login') {
+				await firebase.auth().signInWithEmailAndPassword(email, password);
+			} else {
+				await firebase.auth().createUserWithEmailAndPassword(email, password);
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
 	return (
 		<Container component='main' maxWidth='xs'>
 			<CssBaseline />
@@ -102,24 +125,28 @@ const SignIn = ({ authState: { isAuthenticated } }) => {
 				<Typography component='h1' variant='h5'>
 					{mode === 'login' ? 'Sign in' : 'Sign up'}
 				</Typography>
-				<form className={classes.form} noValidate>
+				<form onSubmit={handleSubmit} className={classes.form} noValidate>
 					<TextField
+						onChange={onChange}
+						value={userInput.email}
 						variant='outlined'
 						margin='normal'
 						required
 						fullWidth
 						id='email'
 						label='Email Address'
-						name='email'
 						autoComplete='email'
+						name='email'
 						autoFocus
 					/>
 					<TextField
+						onChange={onChange}
+						value={userInput.password}
+						name='password'
 						variant='outlined'
 						margin='normal'
 						required
 						fullWidth
-						name='password'
 						label='Password'
 						type='password'
 						id='password'
