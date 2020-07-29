@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import firebase, { provider } from '../firebase/firebaseApp';
 import { connect } from 'react-redux';
+import { signInGoogle } from '../redux/actions/auths';
 
-const Login = () => {
-	const handleClick = () => {
-		firebase
-			.auth()
-			.signInWithPopup(provider)
-			.then(function (result) {
-				// This gives you a Google Access Token. You can use it to access the Google API.
-				var token = result.credential.accessToken;
-				// The signed-in user info.
-				var user = result.user;
-				// ...
-				console.log(token, user);
-			})
-			.catch(function (error) {
-				// Handle Errors here.
-				var errorCode = error.code;
-				var errorMessage = error.message;
-				// The email of the user's account used.
-				var email = error.email;
-				// The firebase.auth.AuthCredential type that was used.
-				var credential = error.credential;
-				// ...
-				console.log(error);
-			});
+const Login = ({ signInGoogle, authState: { isAuthenticated } }) => {
+	const history = useHistory();
+	useEffect(() => {
+		if (isAuthenticated) {
+			history.push('/');
+		}
+	}, [isAuthenticated]);
+	const handleClick = async () => {
+		try {
+			const res = await firebase.auth().signInWithPopup(provider);
+			signInGoogle({ data: res.user.providerData[0] });
+		} catch (e) {
+			console.log(e);
+		}
 	};
 	return (
 		<>
@@ -34,4 +26,8 @@ const Login = () => {
 	);
 };
 
-export default connect(null)(Login);
+const mapStateToProps = state => ({
+	authState: state.AUTHS,
+});
+
+export default connect(mapStateToProps, { signInGoogle })(Login);
