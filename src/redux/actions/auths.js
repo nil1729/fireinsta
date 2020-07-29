@@ -20,12 +20,9 @@ const loadUser = () => async dispatch => {
 	}
 };
 
-const signOut = () => async dispatch => {
+const signOut = async () => {
 	try {
-		const res = await firebase.auth().signOut();
-		return dispatch({
-			type: LOG_OUT,
-		});
+		await firebase.auth().signOut();
 	} catch (e) {
 		console.log(e);
 	}
