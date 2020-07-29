@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase, { provider } from '../firebase/firebaseApp';
 import { connect } from 'react-redux';
-import { signInGoogle } from '../redux/actions/auths';
 
-const Login = ({ signInGoogle, authState: { isAuthenticated } }) => {
+const Login = ({ authState: { isAuthenticated } }) => {
 	const history = useHistory();
 	useEffect(() => {
 		if (isAuthenticated) {
@@ -13,8 +12,7 @@ const Login = ({ signInGoogle, authState: { isAuthenticated } }) => {
 	}, [isAuthenticated]);
 	const handleClick = async () => {
 		try {
-			const res = await firebase.auth().signInWithPopup(provider);
-			signInGoogle({ data: res.user.providerData[0] });
+			await firebase.auth().signInWithPopup(provider);
 		} catch (e) {
 			console.log(e);
 		}
@@ -30,4 +28,4 @@ const mapStateToProps = state => ({
 	authState: state.AUTHS,
 });
 
-export default connect(mapStateToProps, { signInGoogle })(Login);
+export default connect(mapStateToProps)(Login);

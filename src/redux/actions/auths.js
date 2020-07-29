@@ -1,11 +1,33 @@
-import { SIGN_IN_GOOGLE } from './types';
-const signInGoogle = ev => {
-	if (ev.errors) {
-	} else {
-		return {
-			type: SIGN_IN_GOOGLE,
-			payload: ev.data,
-		};
+import { LOAD_USER, LOG_OUT } from './types';
+import firebase from '../../firebase/firebaseApp';
+
+const loadUser = () => async dispatch => {
+	try {
+		firebase.auth().onAuthStateChanged(function (user) {
+			if (user) {
+				return dispatch({
+					type: LOAD_USER,
+					payload: user.providerData[0],
+				});
+			} else {
+				return dispatch({
+					type: LOG_OUT,
+				});
+			}
+		});
+	} catch (e) {
+		console.log(e);
 	}
 };
-export { signInGoogle };
+
+const signOut = () => async dispatch => {
+	try {
+		const res = await firebase.auth().signOut();
+		return dispatch({
+			type: LOG_OUT,
+		});
+	} catch (e) {
+		console.log(e);
+	}
+};
+export { loadUser, signOut };

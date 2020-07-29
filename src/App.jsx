@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Login from './routes/Login';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PrivateRoute from './routes/PrivateRoute';
 import Home from './routes/Home';
+import { connect } from 'react-redux';
+import { loadUser } from './redux/actions/auths';
 
-const App = () => {
+const App = ({ loadUser }) => {
+	useEffect(() => {
+		loadUser();
+		console.log('root');
+	}, []);
 	return (
 		<Router>
 			<Switch>
@@ -15,4 +21,4 @@ const App = () => {
 	);
 };
 
-export default App;
+export default connect(null, { loadUser })(App);
