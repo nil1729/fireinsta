@@ -40,7 +40,7 @@ const CustomizedSnackbars = ({ authState }) => {
 	return (
 		<div className={classes.root}>
 			<Snackbar
-				anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				open={open}
 				autoHideDuration={5500}
 				onClose={handleClose}>

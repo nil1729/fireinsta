@@ -6,15 +6,17 @@ import Home from './routes/Home';
 import { connect } from 'react-redux';
 import { loadUser } from './redux/actions/auths';
 import Alerts from './components/Layouts/Alerts';
+import Navbar from './components/Layouts/Navbar';
+import './App.css';
 
 const App = ({ loadUser }) => {
 	useEffect(() => {
 		loadUser();
-		console.log('root');
 		// eslint-disable-next-line
 	}, []);
 	return (
 		<Router>
+			<Navbar />
 			<Switch>
 				<Route path='/login' exact component={Login} />
 				<PrivateRoute path='/' exact component={Home} />
