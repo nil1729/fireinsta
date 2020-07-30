@@ -9,7 +9,7 @@ const initialState = {
 	isAuthenticated: false,
 	loading: true,
 	user: null,
-	alerts: null,
+	alerts: {},
 };
 
 export default (state = initialState, action) => {
@@ -40,7 +40,7 @@ export default (state = initialState, action) => {
 		case CLEAR_ALERTS:
 			return {
 				...state,
-				alerts: null,
+				alerts: {},
 			};
 		default: {
 			return state;

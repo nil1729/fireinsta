@@ -4,6 +4,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import { clearAuthAlerts } from '../../redux/actions/auths';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const CustomizedSnackbars = ({ authState }) => {
+const CustomizedSnackbars = ({ authState, clearAuthAlerts }) => {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 	const handleClose = (event, reason) => {
@@ -26,30 +27,33 @@ const CustomizedSnackbars = ({ authState }) => {
 			return;
 		}
 		setOpen(false);
+		clearAuthAlerts();
 	};
 
 	useEffect(() => {
-		if (authState.alerts) {
+		if (Object.keys(authState.alerts).length !== 0) {
 			setOpen(true);
 		} else {
 			setOpen(false);
 		}
 		// eslint-disable-next-line
-	}, [authState]);
+	}, [authState.alerts]);
 
 	return (
 		<div className={classes.root}>
-			<Snackbar
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-				open={open}
-				autoHideDuration={5500}
-				onClose={handleClose}>
-				<Alert
-					onClose={handleClose}
-					severity={authState.alerts && authState.alerts.type}>
-					{authState.alerts && authState.alerts.message}
-				</Alert>
-			</Snackbar>
+			{Object.keys(authState.alerts).length !== 0 ? (
+				<Snackbar
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+					open={open}
+					autoHideDuration={5000}
+					onClose={handleClose}>
+					<Alert
+						onClose={handleClose}
+						severity={authState.alerts && authState.alerts.type}>
+						{authState.alerts && authState.alerts.message}
+					</Alert>
+				</Snackbar>
+			) : null}
 		</div>
 	);
 };
@@ -58,4 +62,6 @@ const mapStateToProps = state => ({
 	authState: state.AUTHS,
 });
 
-export default connect(mapStateToProps)(CustomizedSnackbars);
+export default connect(mapStateToProps, { clearAuthAlerts })(
+	CustomizedSnackbars
+);

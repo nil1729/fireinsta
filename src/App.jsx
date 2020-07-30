@@ -8,6 +8,7 @@ import { loadUser } from './redux/actions/auths';
 import Alerts from './components/Layouts/Alerts';
 import Navbar from './components/Layouts/Navbar';
 import './App.css';
+import Settings from './components/pages/Settings';
 
 const App = ({ loadUser }) => {
 	useEffect(() => {
@@ -20,6 +21,7 @@ const App = ({ loadUser }) => {
 			<Switch>
 				<Route path='/login' exact component={Login} />
 				<PrivateRoute path='/' exact component={Home} />
+				<PrivateRoute path='/settings' exact component={Settings} />
 			</Switch>
 			<Alerts />
 		</Router>

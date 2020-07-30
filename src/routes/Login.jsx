@@ -104,9 +104,6 @@ const SignIn = ({
 		} catch (e) {
 			console.log(e);
 		}
-		setTimeout(() => {
-			clearAuthAlerts();
-		}, 6000);
 	};
 	const onChange = e => {
 		setUserInput({
@@ -118,6 +115,13 @@ const SignIn = ({
 		e.preventDefault();
 		const { email, password } = userInput;
 		try {
+			const domain = email.split('@')[1];
+			if (domain === 'gmail.com') {
+				return setAuthAlert({
+					type: 'info',
+					message: `Please use Google Sign in`,
+				});
+			}
 			if (mode === 'login') {
 				await firebase.auth().signInWithEmailAndPassword(email, password);
 			} else {
@@ -133,9 +137,6 @@ const SignIn = ({
 				message: e.message,
 			});
 		}
-		setTimeout(() => {
-			clearAuthAlerts();
-		}, 6000);
 	};
 	return (
 		<Container component='main' maxWidth='xs'>

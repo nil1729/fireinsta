@@ -1,5 +1,6 @@
 import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -18,7 +19,8 @@ import { signOut } from '../../redux/actions/auths';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import HomeIcon from '@material-ui/icons/Home';
-
+import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp';
+import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 const useStyles = makeStyles(theme => ({
 	grow: {
 		flexGrow: 1,
@@ -74,8 +76,8 @@ const useStyles = makeStyles(theme => ({
 		display: 'none',
 		[theme.breakpoints.up('md')]: {
 			display: 'flex',
-        },
-        alignItems: 'center'
+		},
+		alignItems: 'center',
 	},
 	sectionMobile: {
 		display: 'flex',
@@ -91,6 +93,20 @@ const useStyles = makeStyles(theme => ({
 	appBarRoot: {
 		color: '#222',
 		backgroundColor: 'rgb(255, 255, 255)',
+	},
+	iconBtnRoot: {
+		paddingLeft: 0,
+	},
+	menuList: {
+		width: '15rem',
+	},
+	menuTextStyle: {
+		fontSize: '1.2rem',
+		fontWeight: '100',
+		letterSpacing: '1px',
+		'& a': {
+			textDecoration: 'none',
+		},
 	},
 }));
 
@@ -128,16 +144,39 @@ function PrimarySearchAppBar({ authState, signOut }) {
 			keepMounted
 			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 			open={isMenuOpen}
-			onClose={handleMenuClose}>
-			<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-			<MenuItem onClick={handleMenuClose}>Settings</MenuItem>
+			onClose={handleMenuClose}
+			classes={{ list: classes.menuList }}>
+			<MenuItem onClick={handleMenuClose}>
+				<IconButton
+					className={classes.iconBtnRoot}
+					aria-label='account of current user'
+					aria-controls='primary-search-account-menu'
+					aria-haspopup='true'
+					color='inherit'>
+					<AccountCircleSharpIcon />
+				</IconButton>
+				<p className={classes.menuTextStyle}>Profile</p>
+			</MenuItem>
+			<MenuItem onClick={handleMenuClose}>
+				<IconButton
+					className={classes.iconBtnRoot}
+					aria-label='account of current user'
+					aria-controls='primary-search-account-menu'
+					aria-haspopup='true'
+					color='inherit'>
+					<SettingsSharpIcon />
+				</IconButton>
+				<p className={classes.menuTextStyle}>
+					<Link to='/settings'>Settings</Link>{' '}
+				</p>
+			</MenuItem>
 			<Divider />
 			<MenuItem
 				onClick={() => {
 					handleMenuClose();
 					signOut();
 				}}>
-				Logout
+				<p className={classes.menuTextStyle}>Logout</p>
 			</MenuItem>
 		</Menu>
 	);
