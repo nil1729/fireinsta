@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -120,6 +120,11 @@ function PrimarySearchAppBar({ authState, signOut }) {
 		setAnchorEl(null);
 		handleMobileMenuClose();
 	};
+	const pushToProfile = () => {
+		history.push('/profile');
+		setAnchorEl(null);
+		handleMobileMenuClose();
+	};
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -155,7 +160,7 @@ function PrimarySearchAppBar({ authState, signOut }) {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 			classes={{ list: classes.menuList }}>
-			<MenuItem onClick={handleMenuClose}>
+			<MenuItem onClick={pushToProfile}>
 				<IconButton
 					className={classes.iconBtnRoot}
 					aria-label='account of current user'

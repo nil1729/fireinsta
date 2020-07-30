@@ -10,6 +10,7 @@ import Navbar from './components/Layouts/Navbar';
 import './App.css';
 import Settings from './components/pages/Settings';
 import PageLoader from './components/Layouts/FullPageLoader';
+import Profile from './components/pages/Profile';
 
 const App = ({ loadUser }) => {
 	useEffect(() => {
@@ -24,6 +25,7 @@ const App = ({ loadUser }) => {
 				<Route path='/login' exact component={Login} />
 				<PrivateRoute path='/' exact component={Home} />
 				<PrivateRoute path='/settings' exact component={Settings} />
+				<PrivateRoute path='/profile' exact component={Profile} />
 			</Switch>
 			<Alerts />
 		</Router>
