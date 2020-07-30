@@ -1,4 +1,4 @@
-import { LOAD_USER, LOG_OUT } from './types';
+import { LOAD_USER, LOG_OUT, AUTH_ALERTS, CLEAR_ALERTS } from './types';
 import firebase from '../../firebase/firebaseApp';
 
 const loadUser = () => async dispatch => {
@@ -27,4 +27,18 @@ const signOut = () => async dispatch => {
 		console.log(e);
 	}
 };
-export { loadUser, signOut };
+
+const setAuthAlert = ev => {
+	return {
+		type: AUTH_ALERTS,
+		payload: ev,
+	};
+};
+
+const clearAuthAlerts = () => {
+	return {
+		type: CLEAR_ALERTS,
+	};
+};
+
+export { loadUser, signOut, setAuthAlert, clearAuthAlerts };

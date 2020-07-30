@@ -5,6 +5,7 @@ import PrivateRoute from './routes/PrivateRoute';
 import Home from './routes/Home';
 import { connect } from 'react-redux';
 import { loadUser } from './redux/actions/auths';
+import Alerts from './components/Layouts/Alerts';
 
 const App = ({ loadUser }) => {
 	useEffect(() => {
@@ -18,6 +19,7 @@ const App = ({ loadUser }) => {
 				<Route path='/login' exact component={Login} />
 				<PrivateRoute path='/' exact component={Home} />
 			</Switch>
+			<Alerts />
 		</Router>
 	);
 };

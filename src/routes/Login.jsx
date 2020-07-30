@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase, { provider } from '../firebase/firebaseApp';
 import { connect } from 'react-redux';
+import { setAuthAlert, clearAuthAlerts } from '../redux/actions/auths';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -71,7 +72,11 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const SignIn = ({ authState: { isAuthenticated } }) => {
+const SignIn = ({
+	authState: { isAuthenticated },
+	setAuthAlert,
+	clearAuthAlerts,
+}) => {
 	const classes = useStyles();
 	const history = useHistory();
 	const [mode, setMode] = useState('register');
@@ -92,9 +97,16 @@ const SignIn = ({ authState: { isAuthenticated } }) => {
 	const handleClick = async () => {
 		try {
 			await firebase.auth().signInWithPopup(provider);
+			setAuthAlert({
+				type: 'success',
+				message: `You are now Signed in`,
+			});
 		} catch (e) {
 			console.log(e);
 		}
+		setTimeout(() => {
+			clearAuthAlerts();
+		}, 6000);
 	};
 	const onChange = e => {
 		setUserInput({
@@ -111,9 +123,19 @@ const SignIn = ({ authState: { isAuthenticated } }) => {
 			} else {
 				await firebase.auth().createUserWithEmailAndPassword(email, password);
 			}
+			setAuthAlert({
+				type: 'success',
+				message: `You are now Signed in`,
+			});
 		} catch (e) {
-			console.log(e);
+			setAuthAlert({
+				type: 'error',
+				message: e.message,
+			});
 		}
+		setTimeout(() => {
+			clearAuthAlerts();
+		}, 6000);
 	};
 	return (
 		<Container component='main' maxWidth='xs'>
@@ -209,4 +231,6 @@ const SignIn = ({ authState: { isAuthenticated } }) => {
 const mapStateToProps = state => ({
 	authState: state.AUTHS,
 });
-export default connect(mapStateToProps)(SignIn);
+export default connect(mapStateToProps, { setAuthAlert, clearAuthAlerts })(
+	SignIn
+);
