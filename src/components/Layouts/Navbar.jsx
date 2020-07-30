@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -111,6 +111,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function PrimarySearchAppBar({ authState, signOut }) {
+	const history = useHistory();
+	const pushToHome = () => {
+		history.push('/');
+	};
+	const pushToSettings = () => {
+		history.push('/settings');
+		setAnchorEl(null);
+		handleMobileMenuClose();
+	};
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -157,7 +166,7 @@ function PrimarySearchAppBar({ authState, signOut }) {
 				</IconButton>
 				<p className={classes.menuTextStyle}>Profile</p>
 			</MenuItem>
-			<MenuItem onClick={handleMenuClose}>
+			<MenuItem onClick={pushToSettings}>
 				<IconButton
 					className={classes.iconBtnRoot}
 					aria-label='account of current user'
@@ -166,9 +175,7 @@ function PrimarySearchAppBar({ authState, signOut }) {
 					color='inherit'>
 					<SettingsSharpIcon />
 				</IconButton>
-				<p className={classes.menuTextStyle}>
-					<Link to='/settings'>Settings</Link>{' '}
-				</p>
+				<p className={classes.menuTextStyle}>Settings</p>
 			</MenuItem>
 			<Divider />
 			<MenuItem
@@ -244,7 +251,10 @@ function PrimarySearchAppBar({ authState, signOut }) {
 						</div>
 						<div className={classes.grow} />
 						<div className={classes.sectionDesktop}>
-							<IconButton aria-label='show 4 new mails' color='inherit'>
+							<IconButton
+								onClick={pushToHome}
+								aria-label='show 4 new mails'
+								color='inherit'>
 								<Badge badgeContent={4} color='secondary'>
 									<HomeIcon fontSize='large' />
 								</Badge>

@@ -9,6 +9,7 @@ import Alerts from './components/Layouts/Alerts';
 import Navbar from './components/Layouts/Navbar';
 import './App.css';
 import Settings from './components/pages/Settings';
+import PageLoader from './components/Layouts/FullPageLoader';
 
 const App = ({ loadUser }) => {
 	useEffect(() => {
@@ -18,6 +19,7 @@ const App = ({ loadUser }) => {
 	return (
 		<Router>
 			<Navbar />
+			<PageLoader />
 			<Switch>
 				<Route path='/login' exact component={Login} />
 				<PrivateRoute path='/' exact component={Home} />
