@@ -140,7 +140,7 @@ function SimpleContainer({
 								<Container className={classes.dpContainer} maxWidth='sm'>
 									<img
 										className={classes.dpStyle}
-										src={authState.user && authState.user.photoURL}
+										src={user && user.photoURL}
 										alt=''
 									/>
 								</Container>

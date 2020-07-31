@@ -39,10 +39,12 @@ const EditProfile = ({ authState, setAuthAlert, sendUpdateReq }) => {
 	useEffect(() => {
 		if (authState.user) {
 			setUserInput({
-				email: authState.details.email ? authState.details.email : '',
+				email: authState.details.email
+					? authState.details.email
+					: authState.user.email,
 				name: authState.details.displayName
 					? authState.details.displayName
-					: '',
+					: authState.user.displayName,
 				phone: authState.details.phoneNumber
 					? authState.details.phoneNumber
 					: '',
