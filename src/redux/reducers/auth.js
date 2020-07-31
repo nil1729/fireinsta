@@ -33,7 +33,7 @@ export default (state = initialState, action) => {
 		case UPDATE_PROFILE:
 			return {
 				...state,
-				details: action.payload,
+				details: { ...state.details, ...action.payload },
 			};
 		case LOG_OUT:
 			return {
