@@ -6,7 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
-import { setAuthAlert, updateProfile } from '../../redux/actions/auths';
+import { setAuthAlert, sendUpdateReq } from '../../redux/actions/auths';
 import validator from 'validator';
 
 const useStyles = makeStyles(theme => ({
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const EditProfile = ({ authState, setAuthAlert, updateProfile }) => {
+const EditProfile = ({ authState, setAuthAlert, sendUpdateReq }) => {
 	const classes = useStyles();
 	const [userInput, setUserInput] = useState({
 		email: '',
@@ -39,7 +39,6 @@ const EditProfile = ({ authState, setAuthAlert, updateProfile }) => {
 	useEffect(() => {
 		if (authState.user) {
 			setUserInput({
-				...userInput,
 				email: authState.details.email ? authState.details.email : '',
 				name: authState.details.displayName
 					? authState.details.displayName
@@ -126,6 +125,7 @@ const EditProfile = ({ authState, setAuthAlert, updateProfile }) => {
 			website: userInput.website,
 			bio: userInput.bio,
 			username: userInput.username,
+			email: userInput.email,
 		};
 		setUserInput({
 			email: '',
@@ -135,12 +135,8 @@ const EditProfile = ({ authState, setAuthAlert, updateProfile }) => {
 			username: '',
 			name: '',
 		});
-		await updateProfile({
+		await sendUpdateReq({
 			...data,
-		});
-		setAuthAlert({
-			type: 'success',
-			message: 'Your Profile is Successfully Updated',
 		});
 		setSubmitted(false);
 	};
@@ -261,6 +257,6 @@ const mapStateToProps = state => ({
 	authState: state.AUTHS,
 });
 
-export default connect(mapStateToProps, { setAuthAlert, updateProfile })(
+export default connect(mapStateToProps, { setAuthAlert, sendUpdateReq })(
 	EditProfile
 );

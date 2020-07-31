@@ -54,8 +54,8 @@ const clearAuthAlerts = () => {
 
 const updateProfile = ev => async dispatch => {
 	try {
-		const callUpdate = firebase.functions().httpsCallable('updateProfile');
-		await callUpdate(ev);
+		// const callUpdate = firebase.functions().httpsCallable('updateProfile');
+		// await callUpdate(ev);
 		return dispatch({
 			type: UPDATE_PROFILE,
 			payload: ev,
@@ -65,4 +65,40 @@ const updateProfile = ev => async dispatch => {
 	}
 };
 
-export { loadUser, signOut, setAuthAlert, clearAuthAlerts, updateProfile };
+const sendUpdateReq = ev => async dispatch => {
+	try {
+		const callUpdate = firebase.functions().httpsCallable('updateProfile');
+		const res = await callUpdate(ev);
+		if (!res.data) {
+			return dispatch({
+				type: AUTH_ALERTS,
+				payload: {
+					type: 'warning',
+					message: 'Duplicate Username Found. Please use another Username',
+				},
+			});
+		}
+		dispatch({
+			type: UPDATE_PROFILE,
+			payload: ev,
+		});
+		return dispatch({
+			type: AUTH_ALERTS,
+			payload: {
+				type: 'success',
+				message: 'Your Profile is Successfully Updated',
+			},
+		});
+	} catch (e) {
+		console.log(e);
+	}
+};
+
+export {
+	loadUser,
+	signOut,
+	setAuthAlert,
+	clearAuthAlerts,
+	updateProfile,
+	sendUpdateReq,
+};
