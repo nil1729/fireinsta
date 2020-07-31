@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 		width: '25rem',
 	},
 	username: {
-		fontSize: '28px',
+		fontSize: '22px',
 		fontWeight: '100',
 		lineHeight: '32px',
 		marginBottom: '0',
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 		margin: 0,
 	},
 	name: {
-		fontSize: '1.3rem',
+		fontSize: '1.2rem',
 		fontWeight: '400',
 		letterSpacing: '1px',
 	},
@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
 		justifyContent: 'flex-start',
 		alignItems: 'center',
 		textDecoration: 'none',
-		fontSize: '1rem',
+		fontSize: '0.9rem',
 		letterSpacing: '0.5px',
 	},
 }));
@@ -106,13 +106,13 @@ function SimpleContainer({ authState, setAuthAlert }) {
 										onClick={() => {
 											history.push('/settings');
 										}}
-										style={{ margin: '0 2rem' }}
+										style={{ margin: '0 10px 0 1.2rem ', fontSize: '0.75rem' }}
 										variant='outlined'
 										color='secondary'>
 										Edit Profile
 									</Button>
 									<IconButton color='inherit'>
-										<GroupWorkOutlinedIcon fontSize='large' />
+										<GroupWorkOutlinedIcon />
 									</IconButton>
 								</div>
 							</Box>
@@ -143,7 +143,10 @@ function SimpleContainer({ authState, setAuthAlert }) {
 								<Typography className={classes.name} variant='h6' gutterBottom>
 									{authState.details && authState.details.displayName}
 								</Typography>
-								<Typography variant='body1' gutterBottom>
+								<Typography
+									style={{ fontSize: '0.9rem', marginBottom: '10px' }}
+									variant='body1'
+									gutterBottom>
 									{authState.details && authState.details.bio}
 								</Typography>
 								{authState.details && authState.details.website ? (

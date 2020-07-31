@@ -235,7 +235,9 @@ function PrimarySearchAppBar({ authState, signOut }) {
 		return null;
 	} else {
 		return (
-			<div className={classes.grow}>
+			<div
+				style={{ position: 'sticky', top: 0, zIndex: '99' }}
+				className={classes.grow}>
 				<AppBar position='static' classes={{ root: classes.appBarRoot }}>
 					<Toolbar>
 						<Typography className={classes.title} variant='h6' noWrap>
