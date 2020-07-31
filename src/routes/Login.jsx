@@ -86,6 +86,10 @@ const SignIn = ({
 	});
 	useEffect(() => {
 		if (isAuthenticated) {
+			setAuthAlert({
+				type: 'success',
+				message: `You are now Signed in`,
+			});
 			history.push('/');
 		}
 		// eslint-disable-next-line
@@ -97,10 +101,6 @@ const SignIn = ({
 	const handleClick = async () => {
 		try {
 			await firebase.auth().signInWithPopup(provider);
-			setAuthAlert({
-				type: 'success',
-				message: `You are now Signed in`,
-			});
 		} catch (e) {
 			console.log(e);
 		}

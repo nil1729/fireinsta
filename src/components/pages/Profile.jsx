@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import GroupWorkOutlinedIcon from '@material-ui/icons/GroupWorkOutlined';
 import IconButton from '@material-ui/core/IconButton';
 import { connect } from 'react-redux';
+import LinkSharpIcon from '@material-ui/icons/LinkSharp';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -52,6 +53,14 @@ const useStyles = makeStyles(theme => ({
 		display: 'flex',
 		justifyContent: 'center',
 	},
+	urlStyle: {
+		display: 'flex',
+		justifyContent: 'flex-start',
+		alignItems: 'center',
+		textDecoration: 'none',
+		fontSize: '1rem',
+		letterSpacing: '0.5px',
+	},
 }));
 
 function SimpleContainer({ authState }) {
@@ -80,7 +89,7 @@ function SimpleContainer({ authState }) {
 										className={classes.username}
 										variant='h5'
 										gutterBottom>
-										nil_1729
+										{authState.details && authState.details.username}
 									</Typography>
 									<Button
 										onClick={() => {
@@ -121,14 +130,20 @@ function SimpleContainer({ authState }) {
 							</Box>
 							<Box>
 								<Typography className={classes.name} variant='h6' gutterBottom>
-									{authState.user && authState.user.displayName}
+									{authState.details && authState.details.displayName}
 								</Typography>
 								<Typography variant='body1' gutterBottom>
-									body2. Lorem ipsum dolor sit amet, consectetur adipisicing
-									elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum
-									inventore consectetur, neque doloribus, cupiditate numquam
-									dignissimos laborum fugiat deleniti? Eum quasi quidem
-									quibusdam.
+									{authState.details && authState.details.bio}
+								</Typography>
+								<Typography className={classes.name} variant='h6' gutterBottom>
+									<a
+										className={classes.urlStyle}
+										href={authState.details && authState.details.website}
+										rel='noopener noreferrer'
+										target='_blank'>
+										<LinkSharpIcon style={{ marginRight: '10px' }} />{' '}
+										{authState.details && authState.details.website}
+									</a>
 								</Typography>
 							</Box>
 						</Grid>

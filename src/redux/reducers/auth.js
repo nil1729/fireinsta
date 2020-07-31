@@ -4,12 +4,14 @@ import {
 	LOG_OUT,
 	CLEAR_ALERTS,
 	AUTH_ALERTS,
+	UPDATE_PROFILE,
 } from '../actions/types';
 const initialState = {
 	isAuthenticated: false,
 	loading: true,
 	user: null,
 	alerts: {},
+	details: null,
 };
 
 export default (state = initialState, action) => {
@@ -25,7 +27,13 @@ export default (state = initialState, action) => {
 				...state,
 				loading: false,
 				isAuthenticated: true,
-				user: action.payload,
+				user: action.payload.user,
+				details: action.payload.details,
+			};
+		case UPDATE_PROFILE:
+			return {
+				...state,
+				details: action.payload,
 			};
 		case LOG_OUT:
 			return {

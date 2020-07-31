@@ -6,6 +6,8 @@ import Divider from '@material-ui/core/Divider';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
+import { setAuthAlert, updateProfile } from '../../redux/actions/auths';
+import validator from 'validator';
 
 const useStyles = makeStyles(theme => ({
 	cmdText: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const EditProfile = ({ authState }) => {
+const EditProfile = ({ authState, setAuthAlert, updateProfile }) => {
 	const classes = useStyles();
 	const [userInput, setUserInput] = useState({
 		email: '',
@@ -32,38 +34,139 @@ const EditProfile = ({ authState }) => {
 		username: '',
 		name: '',
 	});
-
+	const [initialState, setInitialState] = useState({});
+	const [submitted, setSubmitted] = useState(false);
 	useEffect(() => {
 		if (authState.user) {
 			setUserInput({
 				...userInput,
-				email: authState.user.email,
-				name: authState.user.displayName,
+				email: authState.details.email,
+				name: authState.details.displayName,
+				phone: authState.details.phoneNumber,
+				website: authState.details.website,
+				bio: authState.details.bio,
+				username: authState.details.username,
+			});
+			setInitialState({
+				email: authState.details.email,
+				name: authState.details.displayName,
+				phone: authState.details.phoneNumber,
+				website: authState.details.website,
+				bio: authState.details.bio,
+				username: authState.details.username,
 			});
 		}
+		// eslint-disable-next-line
 	}, [authState]);
 
+	const validateData = () => {
+		const phoneRes = validator.isMobilePhone(userInput.phone, 'en-IN');
+		const urlRes = validator.isURL(userInput.website);
+		const usernameRes = validator.matches(
+			userInput.username,
+			/^[A-Za-z0-9_]*$/
+		);
+		if (!phoneRes) {
+			setAuthAlert({
+				type: 'error',
+				message: 'Please enter a valid phone number',
+			});
+		} else if (!urlRes) {
+			setAuthAlert({
+				type: 'error',
+				message: 'Please enter a valid Website URL',
+			});
+		} else if (!usernameRes) {
+			setAuthAlert({
+				type: 'info',
+				message:
+					'Please enter a Username which only Contains alphanumeric charecters and underscores only',
+			});
+		} else {
+			return true;
+		}
+	};
+	const validateInitial = () => {
+		let keysLen = Object.keys(initialState).length;
+		Object.keys(initialState).forEach(key => {
+			if (initialState[key] === userInput[key]) {
+				keysLen--;
+			}
+		});
+		if (keysLen > 0) {
+			return true;
+		}
+		setAuthAlert({
+			type: 'info',
+			message: 'Please change Some Information to update your Profile',
+		});
+	};
+	const handleSubmit = async e => {
+		e.preventDefault();
+		if (!validateInitial()) {
+			return;
+		}
+		setSubmitted(true);
+		if (!validateData()) {
+			setSubmitted(false);
+			return;
+		}
+		const data = {
+			displayName: userInput.name,
+			phoneNumber: userInput.phone,
+			website: userInput.website,
+			bio: userInput.bio,
+			username: userInput.username,
+		};
+		setUserInput({
+			email: '',
+			phone: '',
+			website: '',
+			bio: '',
+			username: '',
+			name: '',
+		});
+		await updateProfile({
+			...data,
+		});
+		setAuthAlert({
+			type: 'success',
+			message: 'Your Profile is Successfully Updated',
+		});
+		setSubmitted(false);
+	};
+	const onChange = e => {
+		setUserInput({
+			...userInput,
+			[e.target.name]: e.target.value,
+		});
+	};
 	return (
 		<>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<TextField
-					id='outlined-full-width'
 					label='Name'
 					style={{ margin: 8 }}
 					placeholder='Your Name'
 					helperText='You can only change your name twice within 14 days.'
 					fullWidth
 					margin='normal'
+					onChange={onChange}
+					name='name'
 					value={userInput.name}
 					InputLabelProps={{
 						shrink: true,
 					}}
+					type='text'
 					variant='outlined'
 				/>
 				<TextField
 					required
-					id='outlined-full-width'
 					label='Username'
+					helperText='Username contains alphanumeric charecters and underscores only'
+					onChange={onChange}
+					name='username'
+					value={userInput.username}
 					style={{ margin: 8 }}
 					placeholder='Username'
 					fullWidth
@@ -74,10 +177,12 @@ const EditProfile = ({ authState }) => {
 					variant='outlined'
 				/>
 				<TextField
-					id='outlined-full-width'
 					label='Website'
 					style={{ margin: 8 }}
 					placeholder='Website URL'
+					onChange={onChange}
+					name='website'
+					value={userInput.website}
 					fullWidth
 					margin='normal'
 					InputLabelProps={{
@@ -89,6 +194,9 @@ const EditProfile = ({ authState }) => {
 					id='outlined-textarea'
 					label='Bio'
 					placeholder='Write Something about yourself'
+					onChange={onChange}
+					name='bio'
+					value={userInput.bio}
 					multiline
 					fullWidth
 					style={{ margin: 8 }}
@@ -100,7 +208,6 @@ const EditProfile = ({ authState }) => {
 				</Typography>
 				<TextField
 					disabled
-					id='outlined-full-width'
 					label='Email Address'
 					style={{ margin: 8 }}
 					placeholder='Email Address'
@@ -109,11 +216,12 @@ const EditProfile = ({ authState }) => {
 					InputLabelProps={{
 						shrink: true,
 					}}
+					onChange={onChange}
+					name='email'
 					value={userInput.email}
 					variant='outlined'
 				/>
 				<TextField
-					id='outlined-full-width'
 					label='Phone Number'
 					style={{ margin: 8 }}
 					placeholder='Phone Number'
@@ -122,6 +230,9 @@ const EditProfile = ({ authState }) => {
 					InputLabelProps={{
 						shrink: true,
 					}}
+					onChange={onChange}
+					name='phone'
+					value={userInput.phone}
 					variant='outlined'
 				/>
 				<Button
@@ -130,7 +241,7 @@ const EditProfile = ({ authState }) => {
 					variant='outlined'
 					color='secondary'
 					startIcon={<SaveIcon />}>
-					Save
+					{submitted ? 'Loading ...' : 'Save'}
 				</Button>
 			</form>
 		</>
@@ -141,4 +252,6 @@ const mapStateToProps = state => ({
 	authState: state.AUTHS,
 });
 
-export default connect(mapStateToProps)(EditProfile);
+export default connect(mapStateToProps, { setAuthAlert, updateProfile })(
+	EditProfile
+);

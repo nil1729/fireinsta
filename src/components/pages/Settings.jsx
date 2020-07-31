@@ -7,6 +7,7 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import EditProfile from './EditProfile';
+import { connect } from 'react-redux';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -56,7 +57,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function VerticalTabs() {
+function VerticalTabs() {
 	const classes = useStyles();
 	const [value, setValue] = React.useState(0);
 
@@ -86,3 +87,4 @@ export default function VerticalTabs() {
 		</>
 	);
 }
+export default connect(null)(VerticalTabs);
