@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import GroupWorkOutlinedIcon from '@material-ui/icons/GroupWorkOutlined';
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import IconButton from '@material-ui/core/IconButton';
 import { connect } from 'react-redux';
 import LinkSharpIcon from '@material-ui/icons/LinkSharp';
@@ -61,6 +61,7 @@ const useStyles = makeStyles(theme => ({
 		textDecoration: 'none',
 		fontSize: '0.9rem',
 		letterSpacing: '0.5px',
+		color: 'chocolate',
 	},
 }));
 
@@ -108,11 +109,11 @@ function SimpleContainer({ authState, setAuthAlert }) {
 										}}
 										style={{ margin: '0 10px 0 1.2rem ', fontSize: '0.75rem' }}
 										variant='outlined'
-										color='secondary'>
+										color='primary'>
 										Edit Profile
 									</Button>
 									<IconButton color='inherit'>
-										<GroupWorkOutlinedIcon />
+										<AccessibilityNewIcon />
 									</IconButton>
 								</div>
 							</Box>

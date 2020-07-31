@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
 	grow: {
 		flexGrow: 1,
 	},
+	toolBar: {
+		minHeight: '55px',
+	},
 	menuButton: {
 		marginRight: theme.spacing(2),
 	},
@@ -239,7 +242,7 @@ function PrimarySearchAppBar({ authState, signOut }) {
 				style={{ position: 'sticky', top: 0, zIndex: '99' }}
 				className={classes.grow}>
 				<AppBar position='static' classes={{ root: classes.appBarRoot }}>
-					<Toolbar>
+					<Toolbar className={classes.toolBar}>
 						<Typography className={classes.title} variant='h6' noWrap>
 							Fireinsta
 						</Typography>
@@ -263,14 +266,14 @@ function PrimarySearchAppBar({ authState, signOut }) {
 								aria-label='show 4 new mails'
 								color='inherit'>
 								<Badge badgeContent={4} color='secondary'>
-									<HomeIcon fontSize='large' />
+									<HomeIcon />
 								</Badge>
 							</IconButton>
 							<IconButton
 								aria-label='show 17 new notifications'
 								color='inherit'>
 								<Badge badgeContent={17} color='secondary'>
-									<NotificationsIcon fontSize='large' />
+									<NotificationsIcon />
 								</Badge>
 							</IconButton>
 							<Avatar
