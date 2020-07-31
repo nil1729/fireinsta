@@ -91,7 +91,7 @@ const SignIn = ({
 					type: 'info',
 					message: `You are now Signed in. Please add a Username to Proceed`,
 				});
-				history.push('/settings');
+				history.push('/accounts/settings');
 			} else {
 				setAuthAlert({
 					type: 'success',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -113,18 +113,24 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function PrimarySearchAppBar({ authState, signOut }) {
+function PrimarySearchAppBar({ authState, signOut, ...rest }) {
 	const history = useHistory();
+	const [myProfile, setMyProfile] = useState('');
+	useEffect(() => {
+		if (!authState.loading && authState.details && authState.details.username) {
+			setMyProfile(authState.details.username);
+		}
+	}, [authState.details]);
 	const pushToHome = () => {
 		history.push('/');
 	};
 	const pushToSettings = () => {
-		history.push('/settings');
+		history.push('/accounts/settings');
 		setAnchorEl(null);
 		handleMobileMenuClose();
 	};
 	const pushToProfile = () => {
-		history.push('/profile');
+		history.push(`/${myProfile}`);
 		setAnchorEl(null);
 		handleMobileMenuClose();
 	};
@@ -243,7 +249,13 @@ function PrimarySearchAppBar({ authState, signOut }) {
 				className={classes.grow}>
 				<AppBar position='static' classes={{ root: classes.appBarRoot }}>
 					<Toolbar className={classes.toolBar}>
-						<Typography className={classes.title} variant='h6' noWrap>
+						<Typography
+							onClick={() => {
+								history.push('/nil1729');
+							}}
+							className={classes.title}
+							variant='h6'
+							noWrap>
 							Fireinsta
 						</Typography>
 						<div className={classes.search}>
@@ -270,6 +282,9 @@ function PrimarySearchAppBar({ authState, signOut }) {
 								</Badge>
 							</IconButton>
 							<IconButton
+								onClick={() => {
+									history.push('/nil__909');
+								}}
 								aria-label='show 17 new notifications'
 								color='inherit'>
 								<Badge badgeContent={17} color='secondary'>

@@ -11,6 +11,7 @@ import './App.css';
 import Settings from './components/pages/Settings';
 import PageLoader from './components/Layouts/FullPageLoader';
 import Profile from './components/pages/Profile';
+import NotFound from './components/pages/NotFound';
 
 const App = ({ loadUser }) => {
 	useEffect(() => {
@@ -24,8 +25,9 @@ const App = ({ loadUser }) => {
 			<Switch>
 				<Route path='/login' exact component={Login} />
 				<PrivateRoute path='/' exact component={Home} />
-				<PrivateRoute path='/settings' exact component={Settings} />
-				<PrivateRoute path='/profile' exact component={Profile} />
+				<PrivateRoute path='/accounts/settings' exact component={Settings} />
+				<PrivateRoute path='/:username' exact component={Profile} />
+				<Route path='*' component={NotFound} />
 			</Switch>
 			<Alerts />
 		</Router>
