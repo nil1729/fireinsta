@@ -7,3 +7,7 @@
 ::-webkit-scrollbar {
     width: 0;
 }
+
+html {
+    zoom: 90%;
+}
