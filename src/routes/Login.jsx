@@ -73,7 +73,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignIn = ({
-	authState: { isAuthenticated },
+	authState: { isAuthenticated, details },
 	setAuthAlert,
 	clearAuthAlerts,
 }) => {
@@ -86,11 +86,19 @@ const SignIn = ({
 	});
 	useEffect(() => {
 		if (isAuthenticated) {
-			setAuthAlert({
-				type: 'success',
-				message: `You are now Signed in`,
-			});
-			history.push('/');
+			if (!details || !details.username) {
+				setAuthAlert({
+					type: 'info',
+					message: `You are now Signed in. Please add a Username to Proceed`,
+				});
+				history.push('/settings');
+			} else {
+				setAuthAlert({
+					type: 'success',
+					message: `You are now Signed in`,
+				});
+				history.push('/');
+			}
 		}
 		// eslint-disable-next-line
 	}, [isAuthenticated]);

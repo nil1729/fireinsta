@@ -11,6 +11,7 @@ import GroupWorkOutlinedIcon from '@material-ui/icons/GroupWorkOutlined';
 import IconButton from '@material-ui/core/IconButton';
 import { connect } from 'react-redux';
 import LinkSharpIcon from '@material-ui/icons/LinkSharp';
+import { setAuthAlert } from '../../redux/actions/auths';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -63,9 +64,19 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function SimpleContainer({ authState }) {
+function SimpleContainer({ authState, setAuthAlert }) {
 	const classes = useStyles();
 	const history = useHistory();
+	useEffect(() => {
+		if (!authState.loading && !authState.details.username) {
+			setAuthAlert({
+				type: 'error',
+				message: 'Please add a username to view you Profile',
+			});
+			history.push('/settings');
+		}
+		// eslint-disable-next-line
+	}, [authState.details]);
 	return (
 		<React.Fragment>
 			<CssBaseline />
@@ -135,16 +146,21 @@ function SimpleContainer({ authState }) {
 								<Typography variant='body1' gutterBottom>
 									{authState.details && authState.details.bio}
 								</Typography>
-								<Typography className={classes.name} variant='h6' gutterBottom>
-									<a
-										className={classes.urlStyle}
-										href={authState.details && authState.details.website}
-										rel='noopener noreferrer'
-										target='_blank'>
-										<LinkSharpIcon style={{ marginRight: '10px' }} />{' '}
-										{authState.details && authState.details.website}
-									</a>
-								</Typography>
+								{authState.details && authState.details.website ? (
+									<Typography
+										className={classes.name}
+										variant='h6'
+										gutterBottom>
+										<a
+											className={classes.urlStyle}
+											href={authState.details && authState.details.website}
+											rel='noopener noreferrer'
+											target='_blank'>
+											<LinkSharpIcon style={{ marginRight: '10px' }} />{' '}
+											{authState.details && authState.details.website}
+										</a>
+									</Typography>
+								) : null}
 							</Box>
 						</Grid>
 					</Grid>
@@ -158,4 +174,4 @@ const mapStateToProps = state => ({
 	authState: state.AUTHS,
 });
 
-export default connect(mapStateToProps)(SimpleContainer);
+export default connect(mapStateToProps, { setAuthAlert })(SimpleContainer);

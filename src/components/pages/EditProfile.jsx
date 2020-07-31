@@ -40,20 +40,28 @@ const EditProfile = ({ authState, setAuthAlert, updateProfile }) => {
 		if (authState.user) {
 			setUserInput({
 				...userInput,
-				email: authState.details.email,
-				name: authState.details.displayName,
-				phone: authState.details.phoneNumber,
-				website: authState.details.website,
-				bio: authState.details.bio,
-				username: authState.details.username,
+				email: authState.details.email ? authState.details.email : '',
+				name: authState.details.displayName
+					? authState.details.displayName
+					: '',
+				phone: authState.details.phoneNumber
+					? authState.details.phoneNumber
+					: '',
+				website: authState.details.website ? authState.details.website : '',
+				bio: authState.details.bio ? authState.details.bio : '',
+				username: authState.details.username ? authState.details.username : '',
 			});
 			setInitialState({
-				email: authState.details.email,
-				name: authState.details.displayName,
-				phone: authState.details.phoneNumber,
-				website: authState.details.website,
-				bio: authState.details.bio,
-				username: authState.details.username,
+				email: authState.details.email ? authState.details.email : '',
+				name: authState.details.displayName
+					? authState.details.displayName
+					: '',
+				phone: authState.details.phoneNumber
+					? authState.details.phoneNumber
+					: '',
+				website: authState.details.website ? authState.details.website : '',
+				bio: authState.details.bio ? authState.details.bio : '',
+				username: authState.details.username ? authState.details.username : '',
 			});
 		}
 		// eslint-disable-next-line
@@ -61,7 +69,8 @@ const EditProfile = ({ authState, setAuthAlert, updateProfile }) => {
 
 	const validateData = () => {
 		const phoneRes = validator.isMobilePhone(userInput.phone, 'en-IN');
-		const urlRes = validator.isURL(userInput.website);
+		const urlRes =
+			userInput.website === '' ? true : validator.isURL(userInput.website);
 		const usernameRes = validator.matches(
 			userInput.username,
 			/^[A-Za-z0-9_]*$/
