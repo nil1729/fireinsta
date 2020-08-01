@@ -3,6 +3,7 @@ import {
 	SET_USER_LOADING,
 	SET_HOME_USER_LOADING,
 	FETCH_HOME_USERS,
+	CLEAR_USERS_STATE,
 } from './types';
 
 import firebase from '../../firebase/firebaseApp';
@@ -46,4 +47,9 @@ const fetchHomeUsers = () => async dispatch => {
 	}
 };
 
-export { fetchProfile, fetchHomeUsers };
+const clearUsersState = () => {
+	return {
+		type: CLEAR_USERS_STATE,
+	};
+};
+export { fetchProfile, fetchHomeUsers, clearUsersState };

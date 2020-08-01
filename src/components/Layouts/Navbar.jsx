@@ -21,6 +21,8 @@ import Divider from '@material-ui/core/Divider';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp';
 import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
+import { clearUsersState } from '../../redux/actions/users';
+
 const useStyles = makeStyles(theme => ({
 	grow: {
 		flexGrow: 1,
@@ -113,7 +115,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function PrimarySearchAppBar({ authState, signOut, ...rest }) {
+function PrimarySearchAppBar({ authState, signOut, clearUsersState, ...rest }) {
 	const history = useHistory();
 	const [myProfile, setMyProfile] = useState('');
 	useEffect(() => {
@@ -195,6 +197,7 @@ function PrimarySearchAppBar({ authState, signOut, ...rest }) {
 			<MenuItem
 				onClick={() => {
 					handleMenuClose();
+					clearUsersState();
 					signOut();
 				}}>
 				<p className={classes.menuTextStyle}>Logout</p>
@@ -311,4 +314,6 @@ const mapStateToProps = state => ({
 	authState: state.AUTHS,
 });
 
-export default connect(mapStateToProps, { signOut })(PrimarySearchAppBar);
+export default connect(mapStateToProps, { signOut, clearUsersState })(
+	PrimarySearchAppBar
+);

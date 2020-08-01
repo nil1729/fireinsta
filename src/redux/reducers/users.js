@@ -3,6 +3,7 @@ import {
 	SET_USER_LOADING,
 	SET_HOME_USER_LOADING,
 	FETCH_HOME_USERS,
+	CLEAR_USERS_STATE,
 } from '../actions/types';
 const initialState = {
 	loading: false,
@@ -35,6 +36,10 @@ export default (state = initialState, action) => {
 				...state,
 				homeUserLoading: false,
 				homeUsers: action.payload,
+			};
+		case CLEAR_USERS_STATE:
+			return {
+				...initialState,
 			};
 		default:
 			return {
