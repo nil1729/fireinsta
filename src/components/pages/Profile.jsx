@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import IconButton from '@material-ui/core/IconButton';
 import { connect } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -154,21 +154,37 @@ function SimpleContainer({
 											gutterBottom>
 											{user && user.username}
 										</Typography>
-										<Button
-											onClick={() => {
-												history.push('/accounts/settings');
-											}}
-											style={{
-												margin: '0 10px 0 1.2rem ',
-												fontSize: '0.75rem',
-											}}
-											variant='outlined'
-											color='primary'>
-											Edit Profile
-										</Button>
-										<IconButton color='inherit'>
-											<AccessibilityNewIcon />
-										</IconButton>
+										{authState.details &&
+										authState.details.username &&
+										authState.details.username === username ? (
+											<>
+												<Button
+													onClick={() => {
+														history.push('/accounts/settings');
+													}}
+													style={{
+														margin: '0 10px 0 1.2rem ',
+														fontSize: '0.75rem',
+													}}
+													variant='outlined'
+													color='primary'>
+													Edit Profile
+												</Button>
+												<IconButton color='inherit'>
+													<SettingsEthernetIcon />
+												</IconButton>{' '}
+											</>
+										) : (
+											<Button
+												style={{
+													margin: '0 10px 0 1.2rem ',
+													fontSize: '0.75rem',
+												}}
+												variant='outlined'
+												color='secondary'>
+												Follow
+											</Button>
+										)}
 									</div>
 								</Box>
 								<Box style={{ padding: '10px 0' }}>

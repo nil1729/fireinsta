@@ -1,7 +1,14 @@
-import { FETCH_PROFILE, SET_USER_LOADING } from '../actions/types';
+import {
+	FETCH_PROFILE,
+	SET_USER_LOADING,
+	SET_HOME_USER_LOADING,
+	FETCH_HOME_USERS,
+} from '../actions/types';
 const initialState = {
 	loading: false,
 	currentUser: null,
+	homeUserLoading: false,
+	homeUsers: null,
 };
 
 export default (state = initialState, action) => {
@@ -17,6 +24,17 @@ export default (state = initialState, action) => {
 				loading: false,
 				currentUser: action.payload.data,
 				username: action.payload.username,
+			};
+		case SET_HOME_USER_LOADING:
+			return {
+				...state,
+				homeUserLoading: true,
+			};
+		case FETCH_HOME_USERS:
+			return {
+				...state,
+				homeUserLoading: false,
+				homeUsers: action.payload,
 			};
 		default:
 			return {

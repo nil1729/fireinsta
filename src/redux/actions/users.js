@@ -1,4 +1,9 @@
-import { FETCH_PROFILE, SET_USER_LOADING } from './types';
+import {
+	FETCH_PROFILE,
+	SET_USER_LOADING,
+	SET_HOME_USER_LOADING,
+	FETCH_HOME_USERS,
+} from './types';
 
 import firebase from '../../firebase/firebaseApp';
 
@@ -23,4 +28,22 @@ const fetchProfile = ev => async dispatch => {
 	}
 };
 
-export { fetchProfile };
+const fetchHomeUsers = () => async dispatch => {
+	try {
+		dispatch({
+			type: SET_HOME_USER_LOADING,
+		});
+		const callFetchHomeUsers = firebase
+			.functions()
+			.httpsCallable('fetchHomeUser');
+		const res = await callFetchHomeUsers();
+		return dispatch({
+			type: FETCH_HOME_USERS,
+			payload: res.data,
+		});
+	} catch (e) {
+		console.log(e);
+	}
+};
+
+export { fetchProfile, fetchHomeUsers };

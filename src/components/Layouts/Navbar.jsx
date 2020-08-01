@@ -249,13 +249,7 @@ function PrimarySearchAppBar({ authState, signOut, ...rest }) {
 				className={classes.grow}>
 				<AppBar position='static' classes={{ root: classes.appBarRoot }}>
 					<Toolbar className={classes.toolBar}>
-						<Typography
-							onClick={() => {
-								history.push('/nil1729');
-							}}
-							className={classes.title}
-							variant='h6'
-							noWrap>
+						<Typography className={classes.title} variant='h6' noWrap>
 							Fireinsta
 						</Typography>
 						<div className={classes.search}>
@@ -282,9 +276,6 @@ function PrimarySearchAppBar({ authState, signOut, ...rest }) {
 								</Badge>
 							</IconButton>
 							<IconButton
-								onClick={() => {
-									history.push('/nil__909');
-								}}
 								aria-label='show 17 new notifications'
 								color='inherit'>
 								<Badge badgeContent={17} color='secondary'>
@@ -293,7 +284,7 @@ function PrimarySearchAppBar({ authState, signOut, ...rest }) {
 							</IconButton>
 							<Avatar
 								className={classes.avatarRoot}
-								alt='Remy Sharp'
+								alt={authState.user && authState.user.displayName}
 								onClick={handleProfileMenuOpen}
 								src={authState.user && authState.user.photoURL}
 							/>

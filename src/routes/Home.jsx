@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAuthAlert } from '../redux/actions/auths';
+import { fetchHomeUsers } from '../redux/actions/users';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -53,7 +54,13 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const Home = ({ authState, setAuthAlert }) => {
+const Home = ({
+	authState,
+	setAuthAlert,
+	fetchHomeUsers,
+	homeUsers,
+	...rest
+}) => {
 	const classes = useStyles();
 	const history = useHistory();
 	useEffect(() => {
@@ -63,6 +70,13 @@ const Home = ({ authState, setAuthAlert }) => {
 				message: 'Please add a username to Continue with Fireinsta',
 			});
 			history.push('/accounts/settings');
+		} else if (
+			!authState.loading &&
+			authState.details &&
+			authState.details.username &&
+			!homeUsers
+		) {
+			fetchHomeUsers();
 		}
 		// eslint-disable-next-line
 	}, [authState.details]);
@@ -111,6 +125,7 @@ const Home = ({ authState, setAuthAlert }) => {
 
 const mapStateToProps = state => ({
 	authState: state.AUTHS,
+	homeUsers: state.USERS.homeUsers,
 });
 
-export default connect(mapStateToProps, { setAuthAlert })(Home);
+export default connect(mapStateToProps, { setAuthAlert, fetchHomeUsers })(Home);
