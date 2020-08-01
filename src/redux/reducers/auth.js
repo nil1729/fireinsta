@@ -33,7 +33,12 @@ export default (state = initialState, action) => {
 		case UPDATE_PROFILE:
 			return {
 				...state,
-				details: { ...state.details, ...action.payload },
+				details: state.details.photoURL
+					? {
+							...state.details,
+							...action.payload,
+					  }
+					: { photoURL: state.user.photoURL, ...action.payload },
 			};
 		case LOG_OUT:
 			return {
