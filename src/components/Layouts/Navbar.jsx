@@ -40,7 +40,9 @@ const useStyles = makeStyles(theme => ({
 		},
 		fontWeight: 100,
 		letterSpacing: '1.5px',
-		fontSize: '1.3rem',
+		fontSize: '2rem',
+		fontFamily: `'Dancing Script', cursive`,
+		color: 'brown',
 	},
 	search: {
 		position: 'relative',
@@ -274,7 +276,7 @@ function PrimarySearchAppBar({ authState, signOut, clearUsersState, ...rest }) {
 								onClick={pushToHome}
 								aria-label='show 4 new mails'
 								color='inherit'>
-								<Badge badgeContent={4} color='secondary'>
+								<Badge color='secondary'>
 									<HomeIcon />
 								</Badge>
 							</IconButton>

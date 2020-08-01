@@ -33,10 +33,17 @@ function Copyright() {
 
 const useStyles = makeStyles(theme => ({
 	paper: {
-		marginTop: theme.spacing(8),
+		marginTop: theme.spacing(2),
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
+	},
+	title: {
+		fontSize: '60px',
+		letterSpacing: '1px',
+		marginBottom: '1rem',
+		fontFamily: `'Dancing Script', cursive`,
+		color: 'brown',
 	},
 	avatar: {
 		margin: theme.spacing(1),
@@ -44,20 +51,20 @@ const useStyles = makeStyles(theme => ({
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing(1),
+		marginTop: theme.spacing(0),
 	},
 	submit: {
-		margin: theme.spacing(3, 0, 2),
+		margin: theme.spacing(1, 0, 1),
 		letterSpacing: '1.5px',
 		fontWeight: '100',
 	},
 	divide: {
-		marginTop: '1.5rem',
+		margin: '10px',
 		fontSize: '1.3rem',
 		fontWeight: '700',
 	},
 	gbtn: {
-		marginTop: '1rem',
+		marginTop: '0',
 		backgroundColor: 'rgb(66, 133, 244)',
 	},
 	label: {
@@ -130,15 +137,19 @@ const SignIn = ({
 					message: `Please use Google Sign in`,
 				});
 			}
-			if (mode === 'login') {
-				await firebase.auth().signInWithEmailAndPassword(email, password);
-			} else {
-				await firebase.auth().createUserWithEmailAndPassword(email, password);
-			}
-			setAuthAlert({
-				type: 'success',
-				message: `You are now Signed in`,
+			return setAuthAlert({
+				type: 'warning',
+				message: `Sorry! We are working on Custom Email Authentication. Please use Google Sign in.`,
 			});
+			// if (mode === 'login') {
+			// 	await firebase.auth().signInWithEmailAndPassword(email, password);
+			// } else {
+			// 	await firebase.auth().createUserWithEmailAndPassword(email, password);
+			// }
+			// setAuthAlert({
+			// 	type: 'success',
+			// 	message: `You are now Signed in`,
+			// });
 		} catch (e) {
 			setAuthAlert({
 				type: 'error',
@@ -150,6 +161,9 @@ const SignIn = ({
 		<Container component='main' maxWidth='xs'>
 			<CssBaseline />
 			<div className={classes.paper}>
+				<Typography className={classes.title} component='h1' variant='h5'>
+					Fireinsta
+				</Typography>
 				<Avatar className={classes.avatar}>
 					<LockOutlinedIcon />
 				</Avatar>
@@ -230,7 +244,7 @@ const SignIn = ({
 					</span>
 				</Button>
 			</div>
-			<Box mt={5}>
+			<Box mt={3}>
 				<Copyright />
 			</Box>
 		</Container>
