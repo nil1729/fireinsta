@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -10,6 +13,8 @@ import Divider from '@material-ui/core/Divider';
 import AppsIcon from '@material-ui/icons/Apps';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -38,13 +43,31 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function CenteredTabs() {
+function CenteredTabs({ authState, userState }) {
 	const classes = useStyles();
-	const [value, setValue] = React.useState(0);
-
+	const history = useHistory();
+	const { username } = useParams();
+	const [value, setValue] = useState(0);
+	const [posts, setPosts] = useState([]);
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+	useEffect(() => {
+		if (
+			!authState.loading &&
+			authState.details &&
+			username === authState.details.username
+		) {
+			if (authState.details.posts) {
+				setPosts(authState.details.posts);
+			}
+		} else if (userState.currentUser && userState.currentUser !== 'not-found') {
+			if (userState.currentUser.posts) {
+				setPosts(userState.currentUser.posts);
+			}
+		}
+		// eslint-disable-next-line
+	}, [authState.details, userState.currentUser, username]);
 	function TitlebarGridList() {
 		return (
 			<div className={classes.imgRoot}>
@@ -53,9 +76,13 @@ function CenteredTabs() {
 					cellHeight={250}
 					className={classes.gridList}
 					cols={3}>
-					{[0, 1, 2, 3, 4, 5, 6, 7].map(tile => (
-						<GridListTile key={tile.img}>
-							<img src='https://picsum.photos/500/400' alt='lol' />
+					{posts.map(post => (
+						<GridListTile cols={posts.length == 1 ? 2 : 1} key={post.id}>
+							<img
+								style={{ height: '100%', width: '100%' }}
+								src={post.downloadURL}
+								alt={username}
+							/>
 						</GridListTile>
 					))}
 				</GridList>
@@ -67,21 +94,33 @@ function CenteredTabs() {
 			<CssBaseline />
 			<Container className={classes.container} maxWidth='lg'>
 				<Divider />
-				<Paper className={classes.root}>
-					<Tabs
-						value={value}
-						onChange={handleChange}
-						indicatorColor='primary'
-						textColor='primary'
-						centered>
-						<Tab label='Posts' icon={<AppsIcon />} />
-						<Tab label='Stars' icon={<AppsIcon />} />
-					</Tabs>
-				</Paper>
-				<TitlebarGridList />
+				{userState.loading ? (
+					<LinearProgress style={{ marginTop: '3rem' }} color='secondary' />
+				) : userState.currentUser === 'not-found' &&
+				  username !== authState.details.username ? null : (
+					<>
+						<Paper className={classes.root}>
+							<Tabs
+								value={value}
+								onChange={handleChange}
+								indicatorColor='secondary'
+								textColor='secondary'
+								centered>
+								<Tab label='Posts' icon={<AppsIcon />} />
+								<Tab label='Stars' icon={<FavoriteIcon />} />
+							</Tabs>
+						</Paper>
+						<TitlebarGridList />
+					</>
+				)}
 			</Container>
 		</>
 	);
 }
 
-export default CenteredTabs;
+const mapStateToProps = state => ({
+	authState: state.AUTHS,
+	userState: state.USERS,
+});
+
+export default connect(mapStateToProps)(CenteredTabs);

@@ -12,7 +12,7 @@ const uploadImageToStorage = ev => async dispatch => {
 		const storage = firebase.storage();
 		const extName = path.extname(ev.file.name);
 		const fileName = `${crypto
-			.randomBytes(10)
+			.randomBytes(15)
 			.toString('hex')
 			.toUpperCase()}${extName}`;
 		const storageRef = storage.ref(`uploads/${user.uid}/${fileName}`);
