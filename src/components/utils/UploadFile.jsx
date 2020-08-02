@@ -89,7 +89,19 @@ const useStyles = makeStyles(theme => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction='down' ref={ref} {...props} />;
 });
-function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
+
+const clearFileState = () => {
+	return {
+		type: 'CLEAR_FILE_STATE',
+	};
+};
+
+function IconLabelButtons({
+	setAuthAlert,
+	fileState,
+	uploadImageToStorage,
+	clearFileState,
+}) {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 
@@ -98,16 +110,7 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 	const [postTitle, setPostTitle] = useState('');
 	const [loading, setLoading] = React.useState(fileState.fileUploading);
 	const [success, setSuccess] = React.useState(false);
-	const [uploadStatus, setUploadStatus] = useState('Upload Image');
-	useEffect(() => {
-		setLoading(fileState.fileUploading);
-		if (fileState.status) {
-			setLoading(false);
-			setUploadStatus('Image Uploaded');
-			setSuccess(true);
-		}
-		// eslint-disable-next-line
-	}, [fileState]);
+
 	const handleFile = e => {
 		e.persist();
 		const fileType = new RegExp('image/');
@@ -132,14 +135,22 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 		setPostTitle('');
 		setLoading(fileState.fileUploading);
 		setSuccess(false);
-		setUploadStatus('Upload Image');
+		clearFileState();
 	};
 
 	const buttonClassname = clsx({
 		[classes.buttonSuccess]: success,
 	});
-
+	useEffect(() => {
+		setLoading(fileState.fileUploading);
+		if (fileState.status) {
+			setSuccess(true);
+		}
+		// eslint-disable-next-line
+	}, [fileState]);
 	const handleSubmitButtonClick = async () => {
+		clearFileState();
+		setSuccess(false);
 		if (!file) {
 			return setAuthAlert({
 				type: 'warning',
@@ -199,6 +210,7 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 								<Paper className={classes.paper}>
 									<div className='box'>
 										<input
+											disabled={loading}
 											required
 											onChange={handleFile}
 											type='file'
@@ -227,6 +239,7 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 							<Grid item xs={12}>
 								<Paper className={classes.paper}>
 									<TextField
+										disabled={loading}
 										required
 										id='standard-textarea'
 										label='Post Title'
@@ -278,10 +291,9 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 										}}
 										variant='outlined'
 										color='primary'
-										className={buttonClassname}
-										disabled={uploadStatus === 'Upload Image' ? false : true}
+										disabled={loading}
 										onClick={handleSubmitButtonClick}>
-										{uploadStatus}
+										Upload Image
 									</Button>
 									{loading && (
 										<CircularProgress
@@ -313,6 +325,8 @@ const mapStateToProps = state => ({
 	fileState: state.AUTHS.fileState,
 });
 
-export default connect(mapStateToProps, { uploadImageToStorage, setAuthAlert })(
-	IconLabelButtons
-);
+export default connect(mapStateToProps, {
+	uploadImageToStorage,
+	setAuthAlert,
+	clearFileState,
+})(IconLabelButtons);

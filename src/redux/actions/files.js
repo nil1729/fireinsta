@@ -16,10 +16,20 @@ const uploadImageToStorage = ev => async dispatch => {
 			.toString('hex')
 			.toUpperCase()}${extName}`;
 		const storageRef = storage.ref(`uploads/${user.uid}/${fileName}`);
-		const metaData = {
-			PostContent: ev.postTitle,
+		const metadata = {
+			contentType: `${ev.file.type}`,
+			customMetadata: {
+				'Post Content': `${ev.postTitle}`,
+			},
 		};
-		await storageRef.put(ev.file, metaData);
+		await storageRef.put(ev.file, metadata);
+		dispatch({
+			type: 'AUTH_ALERTS',
+			payload: {
+				type: 'success',
+				message: 'Image Uploaded Successfully',
+			},
+		});
 		return dispatch({
 			type: FILE_UPLOADED,
 		});

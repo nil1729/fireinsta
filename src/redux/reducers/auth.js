@@ -78,6 +78,14 @@ export default (state = initialState, action) => {
 					status: true,
 				},
 			};
+		case 'CLEAR_FILE_STATE':
+			return {
+				...state,
+				fileState: {
+					fileUploading: false,
+					status: false,
+				},
+			};
 		default: {
 			return state;
 		}
