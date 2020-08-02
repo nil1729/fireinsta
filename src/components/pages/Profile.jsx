@@ -15,6 +15,7 @@ import LinkSharpIcon from '@material-ui/icons/LinkSharp';
 import { setAuthAlert } from '../../redux/actions/auths';
 import { fetchProfile } from '../../redux/actions/users';
 import NotFound from './NotFound';
+import ProfileGallery from '../utils/ProfileGallery';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -242,6 +243,7 @@ function SimpleContainer({
 					)}
 				</div>
 			</Container>
+			<ProfileGallery />
 		</React.Fragment>
 	);
 }
