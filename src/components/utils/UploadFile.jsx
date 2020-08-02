@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
 	fabProgress: {
 		color: green[500],
 		position: 'absolute',
-		top: -6,
+		top: -4,
 		left: -6,
 		zIndex: 1,
 	},
@@ -276,7 +276,7 @@ function IconLabelButtons({
 									</Fab>
 									{loading && (
 										<CircularProgress
-											size={68}
+											size={70}
 											className={classes.fabProgress}
 										/>
 									)}
