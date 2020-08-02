@@ -5,6 +5,7 @@ import {
 	CLEAR_ALERTS,
 	AUTH_ALERTS,
 	UPDATE_PROFILE,
+	FILE_UPLOAD_LOADING,
 } from '../actions/types';
 const initialState = {
 	isAuthenticated: false,
@@ -12,6 +13,9 @@ const initialState = {
 	user: null,
 	alerts: {},
 	details: null,
+	fileState: {
+		fileUploading: false,
+	},
 };
 
 export default (state = initialState, action) => {
@@ -54,6 +58,14 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				alerts: {},
+			};
+		case FILE_UPLOAD_LOADING:
+			return {
+				...state,
+				fileState: {
+					...state.fileState,
+					fileUploading: true,
+				},
 			};
 		default: {
 			return state;

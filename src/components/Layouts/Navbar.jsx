@@ -124,6 +124,7 @@ function PrimarySearchAppBar({ authState, signOut, clearUsersState, ...rest }) {
 		if (!authState.loading && authState.details && authState.details.username) {
 			setMyProfile(authState.details.username);
 		}
+		// eslint-disable-next-line
 	}, [authState.details]);
 	const pushToHome = () => {
 		history.push('/');

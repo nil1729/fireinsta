@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import UserList from '../components/utils/HomeUsersList';
+import UploadTask from '../components/utils/UploadFile';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -52,6 +53,7 @@ const useStyles = makeStyles(theme => ({
 		color: 'darkgrey',
 		letterSpacing: '0.5px',
 	},
+	uploadPaper: {},
 }));
 
 const Home = ({
@@ -114,6 +116,9 @@ const Home = ({
 							</Paper>
 							<Paper className={classes.listContainer}>
 								<UserList />
+							</Paper>
+							<Paper className={classes.listContainer}>
+								<UploadTask />
 							</Paper>
 						</Grid>
 					</Grid>

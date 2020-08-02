@@ -70,8 +70,14 @@ const EditProfile = ({ authState, setAuthAlert, sendUpdateReq }) => {
 
 	const validateData = () => {
 		const phoneRes = validator.isMobilePhone(userInput.phone, 'en-IN');
+
 		const urlRes =
-			userInput.website === '' ? true : validator.isURL(userInput.website);
+			userInput.website === ''
+				? true
+				: validator.isURL(userInput.website, {
+						require_protocol: true,
+						protocols: ['http', 'https'],
+				  });
 		const usernameRes = validator.matches(
 			userInput.username,
 			/^[A-Za-z0-9_]*$/
@@ -84,7 +90,7 @@ const EditProfile = ({ authState, setAuthAlert, sendUpdateReq }) => {
 		} else if (!urlRes) {
 			setAuthAlert({
 				type: 'error',
-				message: 'Please enter a valid Website URL',
+				message: 'Please enter a valid Website URL eg: https://example.com',
 			});
 		} else if (!usernameRes) {
 			setAuthAlert({
