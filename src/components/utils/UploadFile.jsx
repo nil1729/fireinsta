@@ -98,10 +98,16 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 	const [postTitle, setPostTitle] = useState('');
 	const [loading, setLoading] = React.useState(fileState.fileUploading);
 	const [success, setSuccess] = React.useState(false);
+	const [uploadStatus, setUploadStatus] = useState('Upload Image');
 	useEffect(() => {
 		setLoading(fileState.fileUploading);
+		if (fileState.status) {
+			setLoading(false);
+			setUploadStatus('Image Uploaded');
+			setSuccess(true);
+		}
 		// eslint-disable-next-line
-	}, [fileState.fileUploading]);
+	}, [fileState]);
 	const handleFile = e => {
 		e.persist();
 		const fileType = new RegExp('image/');
@@ -121,22 +127,19 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 
 	const handleClose = () => {
 		setOpen(false);
+		setFile(null);
+		setFileName('Choose a File');
+		setPostTitle('');
+		setLoading(fileState.fileUploading);
+		setSuccess(false);
+		setUploadStatus('Upload Image');
 	};
 
 	const buttonClassname = clsx({
 		[classes.buttonSuccess]: success,
 	});
 
-	const handleSubmitButtonClick = () => {
-		// if (!loading) {
-		// 	setSuccess(false);
-		// 	setLoading(true);
-		// 	timer.current = setTimeout(() => {
-		// 		setSuccess(true);
-		// 		setLoading(false);
-		// 	}, 2000);
-		// }
-
+	const handleSubmitButtonClick = async () => {
 		if (!file) {
 			return setAuthAlert({
 				type: 'warning',
@@ -149,7 +152,10 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 				message: 'Please write Something about the Post',
 			});
 		}
-		uploadImageToStorage({ file, postTitle });
+		await uploadImageToStorage({ file, postTitle });
+		setFile(null);
+		setFileName('Choose a File');
+		setPostTitle('');
 	};
 	return (
 		<>
@@ -172,8 +178,8 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 			<Dialog
 				fullWidth={true}
 				maxWidth='sm'
-				disableBackdropClick={false}
-				disableEscapeKeyDown={false}
+				disableBackdropClick={loading}
+				disableEscapeKeyDown={loading}
 				open={open}
 				TransitionComponent={Transition}
 				keepMounted
@@ -273,9 +279,9 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 										variant='outlined'
 										color='primary'
 										className={buttonClassname}
-										disabled={loading}
+										disabled={uploadStatus === 'Upload Image' ? false : true}
 										onClick={handleSubmitButtonClick}>
-										Upload Image
+										{uploadStatus}
 									</Button>
 									{loading && (
 										<CircularProgress
@@ -290,8 +296,12 @@ function IconLabelButtons({ setAuthAlert, fileState, uploadImageToStorage }) {
 				</DialogContent>
 				<Divider style={{ margin: '1rem' }} />
 				<DialogActions style={{ padding: '0px 24px 10px' }}>
-					<Button onClick={handleClose} variant='outlined' color='secondary'>
-						Cancel
+					<Button
+						disabled={loading}
+						onClick={handleClose}
+						variant='outlined'
+						color='secondary'>
+						Close
 					</Button>
 				</DialogActions>
 			</Dialog>

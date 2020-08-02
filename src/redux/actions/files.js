@@ -1,22 +1,28 @@
-import { FILE_UPLOAD, FILE_UPLOAD_LOADING } from './types';
+import { FILE_UPLOADED, FILE_UPLOAD_LOADING } from './types';
 import crypto from 'crypto';
 import path from 'path';
 import firebase from '../../firebase/firebaseApp';
 
 const uploadImageToStorage = ev => async dispatch => {
-	const storage = firebase.storage();
-	const extName = path.extname(ev.file.name);
-	const fileName = `${crypto
-		.randomBytes(15)
-		.toString('hex')
-		.toUpperCase()}${extName}`;
 	try {
 		dispatch({
 			type: FILE_UPLOAD_LOADING,
 		});
-		const storageRef = storage.ref(`uploads/${fileName}`);
-		const snapshot = await storageRef.put(ev.file);
-		console.log(snapshot);
+		const user = firebase.auth().currentUser;
+		const storage = firebase.storage();
+		const extName = path.extname(ev.file.name);
+		const fileName = `${crypto
+			.randomBytes(10)
+			.toString('hex')
+			.toUpperCase()}${extName}`;
+		const storageRef = storage.ref(`uploads/${user.uid}/${fileName}`);
+		const metaData = {
+			PostContent: ev.postTitle,
+		};
+		await storageRef.put(ev.file, metaData);
+		return dispatch({
+			type: FILE_UPLOADED,
+		});
 	} catch (e) {
 		console.log(e);
 	}

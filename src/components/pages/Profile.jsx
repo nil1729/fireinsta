@@ -105,7 +105,6 @@ function SimpleContainer({
 			!userState.currentUser &&
 			username !== authState.details.username
 		) {
-			console.log('AUTH USER');
 			fetchProfile(username);
 		} else if (
 			!authState.loading &&
@@ -113,7 +112,6 @@ function SimpleContainer({
 			userState.currentUser &&
 			username !== userState.username
 		) {
-			console.log('CUR USER', username);
 			fetchProfile(username);
 		} else if (userState.currentUser && userState.currentUser !== 'not-found') {
 			setUser(userState.currentUser);

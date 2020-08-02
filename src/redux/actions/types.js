@@ -17,5 +17,5 @@ export const CLEAR_USERS_STATE = 'CLEAR_USERS_STATE';
 
 // File Uploads
 
-export const FILE_UPLOAD = 'FILE_UPLOAD';
+export const FILE_UPLOADED = 'FILE_UPLOADED';
 export const FILE_UPLOAD_LOADING = 'FILE_UPLOAD_LOADING';
