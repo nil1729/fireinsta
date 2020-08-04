@@ -4,12 +4,16 @@ import {
 	SET_HOME_USER_LOADING,
 	FETCH_HOME_USERS,
 	CLEAR_USERS_STATE,
+	SET_HOME_POST_LOADING,
+	FETCH_HOME_POSTS,
 } from '../actions/types';
 const initialState = {
 	loading: false,
 	currentUser: null,
 	homeUserLoading: false,
 	homeUsers: null,
+	homePosts: null,
+	homePostsLoading: false,
 };
 
 export default (state = initialState, action) => {
@@ -40,6 +44,17 @@ export default (state = initialState, action) => {
 		case CLEAR_USERS_STATE:
 			return {
 				...initialState,
+			};
+		case SET_HOME_POST_LOADING:
+			return {
+				...state,
+				homePostsLoading: true,
+			};
+		case FETCH_HOME_POSTS:
+			return {
+				...state,
+				homePostsLoading: false,
+				homePosts: action.payload,
 			};
 		default:
 			return {

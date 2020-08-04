@@ -77,7 +77,7 @@ function CenteredTabs({ authState, userState }) {
 					className={classes.gridList}
 					cols={3}>
 					{posts.map(post => (
-						<GridListTile cols={posts.length == 1 ? 2 : 1} key={post.id}>
+						<GridListTile cols={1} key={post.id}>
 							<img
 								style={{ height: '100%', width: '100%' }}
 								src={post.downloadURL}

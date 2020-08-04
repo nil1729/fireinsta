@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAuthAlert } from '../redux/actions/auths';
-import { fetchHomeUsers } from '../redux/actions/users';
+import { fetchHomeUsers, fetchHomePosts } from '../redux/actions/users';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -55,13 +55,18 @@ const useStyles = makeStyles(theme => ({
 		color: 'darkgrey',
 		letterSpacing: '0.5px',
 	},
-	uploadPaper: {},
+	homeControl: {
+		maxHeight: '30rem',
+		top: '4rem',
+		position: 'sticky',
+	},
 }));
 
 const Home = ({
 	authState,
 	setAuthAlert,
 	fetchHomeUsers,
+	fetchHomePosts,
 	homeUsers,
 	...rest
 }) => {
@@ -81,6 +86,7 @@ const Home = ({
 			!homeUsers
 		) {
 			fetchHomeUsers();
+			fetchHomePosts();
 		}
 		// eslint-disable-next-line
 	}, [authState.details]);
@@ -95,7 +101,7 @@ const Home = ({
 								<PostCard />
 							</Paper>
 						</Grid>
-						<Grid item xs={5}>
+						<Grid className={classes.homeControl} item xs={5}>
 							<Paper className={classes.profleContainer}>
 								<Avatar
 									style={{ height: '66px', width: '66px' }}
@@ -142,4 +148,8 @@ const mapStateToProps = state => ({
 	homeUsers: state.USERS.homeUsers,
 });
 
-export default connect(mapStateToProps, { setAuthAlert, fetchHomeUsers })(Home);
+export default connect(mapStateToProps, {
+	setAuthAlert,
+	fetchHomeUsers,
+	fetchHomePosts,
+})(Home);

@@ -4,6 +4,8 @@ import {
 	SET_HOME_USER_LOADING,
 	FETCH_HOME_USERS,
 	CLEAR_USERS_STATE,
+	SET_HOME_POST_LOADING,
+	FETCH_HOME_POSTS,
 } from './types';
 
 import firebase from '../../firebase/firebaseApp';
@@ -52,4 +54,23 @@ const clearUsersState = () => {
 		type: CLEAR_USERS_STATE,
 	};
 };
-export { fetchProfile, fetchHomeUsers, clearUsersState };
+
+const fetchHomePosts = () => async dispatch => {
+	try {
+		dispatch({
+			type: SET_HOME_POST_LOADING,
+		});
+		const callFetchAllPosts = firebase
+			.functions()
+			.httpsCallable('fetchAllPosts');
+		const res = await callFetchAllPosts();
+		return dispatch({
+			type: FETCH_HOME_POSTS,
+			payload: res.data,
+		});
+	} catch (e) {
+		console.log(e);
+	}
+};
+
+export { fetchProfile, fetchHomeUsers, clearUsersState, fetchHomePosts };
