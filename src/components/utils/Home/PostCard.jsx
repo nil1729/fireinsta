@@ -19,6 +19,7 @@ import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -75,7 +76,9 @@ function RecipeReviewCard({ homePostsLoading, homePosts }) {
 						</IconButton>
 					}
 					title={post.author.displayName}
-					subheader='September 14, 2016'
+					subheader={moment(new Date(post.createdAt._seconds * 1000)).format(
+						'MMMM Do YYYY'
+					)}
 				/>
 				<Divider style={{ margin: '0 5px 10px' }} />
 				<CardMedia
