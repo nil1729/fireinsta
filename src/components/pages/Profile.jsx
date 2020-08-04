@@ -192,7 +192,7 @@ function SimpleContainer({
 											className={classes.stats}
 											variant='h6'
 											gutterBottom>
-											0 posts
+											{user && user.posts.length} posts
 										</Typography>
 										<Typography
 											className={classes.stats}

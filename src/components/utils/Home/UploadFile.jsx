@@ -21,8 +21,8 @@ import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 
 import { connect } from 'react-redux';
-import { setAuthAlert } from '../../redux/actions/auths';
-import { uploadImageToStorage } from '../../redux/actions/files';
+import { setAuthAlert } from '../../../redux/actions/auths';
+import { uploadImageToStorage } from '../../../redux/actions/files';
 
 const useStyles = makeStyles(theme => ({
 	button: {

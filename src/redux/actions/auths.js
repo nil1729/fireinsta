@@ -54,8 +54,8 @@ const clearAuthAlerts = () => {
 
 const updateProfile = ev => async dispatch => {
 	try {
-		// const callUpdate = firebase.functions().httpsCallable('updateProfile');
-		// await callUpdate(ev);
+		const callUpdate = firebase.functions().httpsCallable('updateProfile');
+		await callUpdate(ev);
 		return dispatch({
 			type: UPDATE_PROFILE,
 			payload: ev,

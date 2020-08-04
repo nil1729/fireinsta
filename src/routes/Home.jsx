@@ -11,15 +11,16 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import UserList from '../components/utils/HomeUsersList';
-import UploadTask from '../components/utils/UploadFile';
+import UserList from '../components/utils/Home/HomeUsersList';
+import UploadTask from '../components/utils/Home/UploadFile';
+import PostCard from '../components/utils/Home/PostCard';
 
 const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1,
 	},
 	paper: {
-		padding: theme.spacing(2),
+		padding: theme.spacing(4),
 		textAlign: 'center',
 		color: theme.palette.text.secondary,
 	},
@@ -48,6 +49,7 @@ const useStyles = makeStyles(theme => ({
 		fontSize: '1rem',
 		fontWeight: '500',
 		letterSpacing: '0.5px',
+		cursor: 'pointer',
 	},
 	authName: {
 		color: 'darkgrey',
@@ -89,7 +91,9 @@ const Home = ({
 				<div className={classes.root}>
 					<Grid container spacing={3}>
 						<Grid item xs={7}>
-							<Paper className={classes.paper}></Paper>
+							<Paper className={classes.paper}>
+								<PostCard />
+							</Paper>
 						</Grid>
 						<Grid item xs={5}>
 							<Paper className={classes.profleContainer}>
@@ -100,6 +104,11 @@ const Home = ({
 								/>
 								<Box className={classes.boxStyle}>
 									<Typography
+										onClick={() => {
+											history.push(
+												`/${authState.details && authState.details.username}`
+											);
+										}}
 										className={classes.authUsername}
 										variant='body2'
 										gutterBottom>

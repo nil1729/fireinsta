@@ -43,6 +43,7 @@ const useStyles = makeStyles(theme => ({
 		fontSize: '2rem',
 		fontFamily: `'Dancing Script', cursive`,
 		color: 'brown',
+		cursor: 'pointer',
 	},
 	search: {
 		position: 'relative',
@@ -255,7 +256,11 @@ function PrimarySearchAppBar({ authState, signOut, clearUsersState, ...rest }) {
 				className={classes.grow}>
 				<AppBar position='static' classes={{ root: classes.appBarRoot }}>
 					<Toolbar className={classes.toolBar}>
-						<Typography className={classes.title} variant='h6' noWrap>
+						<Typography
+							onClick={pushToHome}
+							className={classes.title}
+							variant='h6'
+							noWrap>
 							Fireinsta
 						</Typography>
 						<div className={classes.search}>
