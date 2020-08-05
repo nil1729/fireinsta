@@ -23,6 +23,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import { connect } from 'react-redux';
 import { setAuthAlert } from '../../../redux/actions/auths';
 import { uploadImageToStorage } from '../../../redux/actions/files';
+import { newFileUpload } from '../../../redux/actions/users';
 
 const useStyles = makeStyles(theme => ({
 	button: {
@@ -101,6 +102,8 @@ function IconLabelButtons({
 	fileState,
 	uploadImageToStorage,
 	clearFileState,
+	newFileUpload,
+	authDetail,
 }) {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
@@ -145,6 +148,15 @@ function IconLabelButtons({
 		setLoading(fileState.fileUploading);
 		if (fileState.status) {
 			setSuccess(true);
+			newFileUpload({
+				author: {
+					displayName: authDetail.displayName,
+					username: authDetail.username,
+					photoURL: authDetail.photoURL,
+				},
+				createdAt: { _seconds: Math.floor(new Date().getTime() / 1000) },
+				...fileState.file,
+			});
 		}
 		// eslint-disable-next-line
 	}, [fileState]);
@@ -323,10 +335,12 @@ function IconLabelButtons({
 
 const mapStateToProps = state => ({
 	fileState: state.AUTHS.fileState,
+	authDetail: state.AUTHS.details,
 });
 
 export default connect(mapStateToProps, {
 	uploadImageToStorage,
 	setAuthAlert,
 	clearFileState,
+	newFileUpload,
 })(IconLabelButtons);

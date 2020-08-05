@@ -6,6 +6,7 @@ import {
 	CLEAR_USERS_STATE,
 	SET_HOME_POST_LOADING,
 	FETCH_HOME_POSTS,
+	NEW_FILE_UPLOAD,
 } from './types';
 
 import firebase from '../../firebase/firebaseApp';
@@ -73,4 +74,17 @@ const fetchHomePosts = () => async dispatch => {
 	}
 };
 
-export { fetchProfile, fetchHomeUsers, clearUsersState, fetchHomePosts };
+const newFileUpload = ev => {
+	return {
+		type: NEW_FILE_UPLOAD,
+		payload: ev,
+	};
+};
+
+export {
+	fetchProfile,
+	fetchHomeUsers,
+	clearUsersState,
+	fetchHomePosts,
+	newFileUpload,
+};

@@ -23,6 +23,7 @@ const uploadImageToStorage = ev => async dispatch => {
 			},
 		};
 		await storageRef.put(ev.file, metadata);
+		const downloadURL = await storageRef.getDownloadURL();
 		dispatch({
 			type: 'AUTH_ALERTS',
 			payload: {
@@ -32,6 +33,7 @@ const uploadImageToStorage = ev => async dispatch => {
 		});
 		return dispatch({
 			type: FILE_UPLOADED,
+			payload: { downloadURL, id: fileName, postContent: ev.postTitle },
 		});
 	} catch (e) {
 		console.log(e);

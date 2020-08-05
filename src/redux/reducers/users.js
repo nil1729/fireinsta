@@ -6,6 +6,7 @@ import {
 	CLEAR_USERS_STATE,
 	SET_HOME_POST_LOADING,
 	FETCH_HOME_POSTS,
+	NEW_FILE_UPLOAD,
 } from '../actions/types';
 const initialState = {
 	loading: false,
@@ -55,6 +56,11 @@ export default (state = initialState, action) => {
 				...state,
 				homePostsLoading: false,
 				homePosts: action.payload,
+			};
+		case NEW_FILE_UPLOAD:
+			return {
+				...state,
+				homePosts: [action.payload, ...state.homePosts],
 			};
 		default:
 			return {

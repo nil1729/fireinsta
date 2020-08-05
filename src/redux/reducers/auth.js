@@ -67,6 +67,7 @@ export default (state = initialState, action) => {
 				fileState: {
 					...state.fileState,
 					fileUploading: true,
+					file: null,
 				},
 			};
 		case FILE_UPLOADED:
@@ -76,6 +77,7 @@ export default (state = initialState, action) => {
 					...state.fileState,
 					fileUploading: false,
 					status: true,
+					file: action.payload,
 				},
 			};
 		case 'CLEAR_FILE_STATE':
