@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -51,6 +52,17 @@ const useStyles = makeStyles(theme => ({
 		width: '50px',
 		height: '50px',
 	},
+	postAuthor: {
+		textAlign: 'left',
+		fontSize: '1rem',
+		letterSpacing: '0.5px',
+		fontWeight: '500',
+		cursor: 'pointer',
+		'& a': {
+			textDecoration: 'none',
+			color: 'inherit',
+		},
+	},
 }));
 
 function RecipeReviewCard({
@@ -74,10 +86,14 @@ function RecipeReviewCard({
 			setAuthID(decryptedData);
 		}
 	}, [authState.user]);
+	function linkToUser(username) {
+		return <Link to={`/${username}`}>{username}</Link>;
+	}
 	function PostCard({ post }) {
 		return (
 			<Card className={classes.root}>
 				<CardHeader
+					classes={{ title: classes.postAuthor }}
 					avatar={
 						<Avatar
 							aria-label='user-dp'
@@ -91,10 +107,7 @@ function RecipeReviewCard({
 							<MoreVertIcon />
 						</IconButton>
 					}
-					title={post.author.displayName}
-					subheader={moment(new Date(post.createdAt._seconds * 1000)).format(
-						'MMMM Do YYYY'
-					)}
+					title={linkToUser(post.author.username)}
 				/>
 				<Divider style={{ margin: '0 5px 10px' }} />
 				<CardMedia

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
+import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -41,6 +41,25 @@ const useStyles = makeStyles(theme => ({
 	icon: {
 		color: 'rgba(255, 255, 255, 0.54)',
 	},
+	coverStyle: {
+		position: 'absolute',
+		left: '50%',
+		top: '50%',
+		transition: 'ease-in 0.2s',
+		transform: 'translate(-50%, -50%)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		display: 'flex',
+		textAlign: 'center',
+		color: 'white',
+		backgroundColor: '#18161649',
+		height: '100%',
+		width: '100%',
+		opacity: '0',
+		'&:hover': {
+			opacity: '1',
+		},
+	},
 }));
 
 function CenteredTabs({ authState, userState }) {
@@ -77,14 +96,12 @@ function CenteredTabs({ authState, userState }) {
 					className={classes.gridList}
 					cols={3}>
 					{posts.length === 0 ? (
-						<>
-							<Typography
-								style={{ color: 'darkgrey' }}
-								variant='body1'
-								gutterBottom>
-								No Posts to show
-							</Typography>
-						</>
+						<Typography
+							style={{ color: 'darkgrey' }}
+							variant='body1'
+							gutterBottom>
+							No Posts to show
+						</Typography>
 					) : (
 						posts.map(post => (
 							<GridListTile cols={1} key={post.id}>
@@ -93,6 +110,14 @@ function CenteredTabs({ authState, userState }) {
 									src={post.downloadURL}
 									alt={username}
 								/>
+								<Box className={classes.coverStyle}>
+									<FavoriteIcon fontSize='large' />
+									<Typography
+										style={{ margin: '0 10px', fontWeight: '500' }}
+										variant='h5'>
+										{post.likes.length}
+									</Typography>
+								</Box>
 							</GridListTile>
 						))
 					)}
