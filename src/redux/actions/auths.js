@@ -6,17 +6,22 @@ import {
 	UPDATE_PROFILE,
 } from './types';
 import firebase from '../../firebase/firebaseApp';
+import cryptoJS from 'crypto-js';
 
 const loadUser = () => async dispatch => {
 	try {
 		firebase.auth().onAuthStateChanged(async function (user) {
 			if (user) {
+				const uid = cryptoJS.AES.encrypt(
+					JSON.stringify(user.uid),
+					'Nilanjan Deb'
+				).toString();
 				const callFetch = firebase.functions().httpsCallable('fetchProfile');
 				const res = await callFetch();
 				return dispatch({
 					type: LOAD_USER,
 					payload: {
-						user: user.providerData[0],
+						user: { ...user.providerData[0], authID: uid },
 						details: res.data,
 					},
 				});

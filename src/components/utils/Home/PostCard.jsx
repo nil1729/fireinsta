@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -20,6 +20,8 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import { likePost } from '../../../redux/actions/users';
+import cryptoJS from 'crypto-js';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -51,13 +53,27 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function RecipeReviewCard({ homePostsLoading, homePosts, authdetail }) {
+function RecipeReviewCard({
+	homePostsLoading,
+	homePosts,
+	authState,
+	likePost,
+}) {
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
+
+	const [authID, setAuthID] = useState('');
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
 	};
+	useEffect(() => {
+		if (authState.user) {
+			var bytes = cryptoJS.AES.decrypt(authState.user.authID, 'Nilanjan Deb');
+			var decryptedData = JSON.parse(bytes.toString(cryptoJS.enc.Utf8));
+			setAuthID(decryptedData);
+		}
+	}, [authState.user]);
 	function PostCard({ post }) {
 		return (
 			<Card className={classes.root}>
@@ -95,13 +111,19 @@ function RecipeReviewCard({ homePostsLoading, homePosts, authdetail }) {
 				</CardContent>
 				<Divider style={{ margin: '0 5px' }} />
 				<CardActions disableSpacing>
-					{authdetail && post.author.username !== authdetail.username ? (
-						<IconButton aria-label='add to favorites'>
+					{authState.details &&
+					post.author.username !== authState.details.username ? (
+						<IconButton
+							color={authID && post.likes.includes(authID) && 'secondary'}
+							onClick={() => {
+								likePost({ id: post.id, likes: post.likes });
+							}}
+							aria-label='add to favorites'>
 							<FavoriteIcon />
 						</IconButton>
 					) : null}
 
-					<IconButton aria-label='share'>
+					<IconButton color='primary' aria-label='share'>
 						<ShareIcon />
 					</IconButton>
 					{/* <IconButton
@@ -137,10 +159,11 @@ function RecipeReviewCard({ homePostsLoading, homePosts, authdetail }) {
 		</>
 	);
 }
+
 const mapStateToProps = state => ({
 	homePostsLoading: state.USERS.homePostsLoading,
 	homePosts: state.USERS.homePosts,
-	authdetail: state.AUTHS.details,
+	authState: state.AUTHS,
 });
 
-export default connect(mapStateToProps)(RecipeReviewCard);
+export default connect(mapStateToProps, { likePost })(RecipeReviewCard);

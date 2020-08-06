@@ -81,10 +81,35 @@ const newFileUpload = ev => {
 	};
 };
 
+const likePost = ev => async dispatch => {
+	try {
+		const authID = firebase.auth().currentUser.uid;
+		if (ev.likes.includes(authID)) {
+			ev.likes.filter(id => id !== authID);
+		} else {
+			ev.likes.push(authID);
+		}
+		await firebase
+			.firestore()
+			.collection('posts')
+			.doc(ev.id)
+			.set(
+				{
+					likes: [...ev.likes],
+				},
+				{ merge: true }
+			);
+		console.log('Updated');
+	} catch (e) {
+		console.log(e);
+	}
+};
+
 export {
 	fetchProfile,
 	fetchHomeUsers,
 	clearUsersState,
 	fetchHomePosts,
 	newFileUpload,
+	likePost,
 };

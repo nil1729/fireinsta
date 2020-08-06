@@ -76,15 +76,26 @@ function CenteredTabs({ authState, userState }) {
 					cellHeight={250}
 					className={classes.gridList}
 					cols={3}>
-					{posts.map(post => (
-						<GridListTile cols={1} key={post.id}>
-							<img
-								style={{ height: '100%', width: '100%' }}
-								src={post.downloadURL}
-								alt={username}
-							/>
-						</GridListTile>
-					))}
+					{posts.length === 0 ? (
+						<>
+							<Typography
+								style={{ color: 'darkgrey' }}
+								variant='body1'
+								gutterBottom>
+								No Posts to show
+							</Typography>
+						</>
+					) : (
+						posts.map(post => (
+							<GridListTile cols={1} key={post.id}>
+								<img
+									style={{ height: '100%', width: '100%' }}
+									src={post.downloadURL}
+									alt={username}
+								/>
+							</GridListTile>
+						))
+					)}
 				</GridList>
 			</div>
 		);
