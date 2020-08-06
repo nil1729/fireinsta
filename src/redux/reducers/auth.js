@@ -79,6 +79,10 @@ export default (state = initialState, action) => {
 					status: true,
 					file: action.payload,
 				},
+				details: {
+					...state.details,
+					posts: [action.payload, ...state.details.posts],
+				},
 			};
 		case 'CLEAR_FILE_STATE':
 			return {

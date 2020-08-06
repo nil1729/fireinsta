@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function RecipeReviewCard({ homePostsLoading, homePosts }) {
+function RecipeReviewCard({ homePostsLoading, homePosts, authdetail }) {
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
 
@@ -95,9 +95,12 @@ function RecipeReviewCard({ homePostsLoading, homePosts }) {
 				</CardContent>
 				<Divider style={{ margin: '0 5px' }} />
 				<CardActions disableSpacing>
-					<IconButton aria-label='add to favorites'>
-						<FavoriteIcon />
-					</IconButton>
+					{authdetail && post.author.username !== authdetail.username ? (
+						<IconButton aria-label='add to favorites'>
+							<FavoriteIcon />
+						</IconButton>
+					) : null}
+
 					<IconButton aria-label='share'>
 						<ShareIcon />
 					</IconButton>
@@ -137,6 +140,7 @@ function RecipeReviewCard({ homePostsLoading, homePosts }) {
 const mapStateToProps = state => ({
 	homePostsLoading: state.USERS.homePostsLoading,
 	homePosts: state.USERS.homePosts,
+	authdetail: state.AUTHS.details,
 });
 
 export default connect(mapStateToProps)(RecipeReviewCard);
