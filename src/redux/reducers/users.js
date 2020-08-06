@@ -62,6 +62,18 @@ export default (state = initialState, action) => {
 				...state,
 				homePosts: [action.payload, ...state.homePosts],
 			};
+		case 'NEW_LIKE_RESPONSE':
+			return {
+				...state,
+				homePosts: state.homePosts.map(post => {
+					if (post.id === action.payload.id) {
+						return {
+							...post,
+							likes: action.payload.likes,
+						};
+					} else return post;
+				}),
+			};
 		default:
 			return {
 				...state,

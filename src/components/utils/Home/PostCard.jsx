@@ -114,7 +114,9 @@ function RecipeReviewCard({
 					{authState.details &&
 					post.author.username !== authState.details.username ? (
 						<IconButton
-							color={authID && post.likes.includes(authID) && 'secondary'}
+							color={
+								authID && post.likes.includes(authID) ? 'secondary' : 'inherit'
+							}
 							onClick={() => {
 								likePost({ id: post.id, likes: post.likes });
 							}}

@@ -85,7 +85,7 @@ const likePost = ev => async dispatch => {
 	try {
 		const authID = firebase.auth().currentUser.uid;
 		if (ev.likes.includes(authID)) {
-			ev.likes.filter(id => id !== authID);
+			ev.likes = ev.likes.filter(id => id !== authID);
 		} else {
 			ev.likes.push(authID);
 		}
@@ -99,7 +99,10 @@ const likePost = ev => async dispatch => {
 				},
 				{ merge: true }
 			);
-		console.log('Updated');
+		return dispatch({
+			type: 'NEW_LIKE_RESPONSE',
+			payload: { id: ev.id, likes: ev.likes },
+		});
 	} catch (e) {
 		console.log(e);
 	}
