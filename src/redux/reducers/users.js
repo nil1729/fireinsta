@@ -74,6 +74,18 @@ export default (state = initialState, action) => {
 					} else return post;
 				}),
 			};
+		case 'NEW_COMMENT_ADD':
+			return {
+				...state,
+				homePosts: state.homePosts.map(post => {
+					if (post.id === action.payload.id) {
+						return {
+							...post,
+							comments: [action.payload.comments, ...post.comments],
+						};
+					} else return post;
+				}),
+			};
 		default:
 			return {
 				...state,

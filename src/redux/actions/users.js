@@ -10,6 +10,7 @@ import {
 } from './types';
 
 import firebase from '../../firebase/firebaseApp';
+import crypto from 'crypto';
 
 const fetchProfile = ev => async dispatch => {
 	try {
@@ -108,6 +109,27 @@ const likePost = ev => async dispatch => {
 	}
 };
 
+const addComment = ev => async dispatch => {
+	try {
+		const callAddComment = firebase.functions().httpsCallable('addComment');
+		const data = {
+			id: ev.id,
+			comments: {
+				id: crypto.randomBytes(10).toString('hex'),
+				text: ev.text,
+				author: ev.author,
+			},
+		};
+		await callAddComment(data);
+		return dispatch({
+			type: 'NEW_COMMENT_ADD',
+			payload: data,
+		});
+	} catch (e) {
+		console.log(e);
+	}
+};
+
 export {
 	fetchProfile,
 	fetchHomeUsers,
@@ -115,4 +137,5 @@ export {
 	fetchHomePosts,
 	newFileUpload,
 	likePost,
+	addComment,
 };
