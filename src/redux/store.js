@@ -9,10 +9,18 @@ const middleware = [thunk];
 
 const composeEnhancers = composeWithDevTools({ trace: true });
 
-const store = createStore(
+let store = createStore(
 	rootReducer,
 	initialState,
 	composeEnhancers(applyMiddleware(...middleware))
 );
+
+if (process.env.NODE_ENV === 'production') {
+	store = createStore(
+		rootReducer,
+		initialState,
+		applyMiddleware(...middleware)
+	);
+}
 
 export default store;
