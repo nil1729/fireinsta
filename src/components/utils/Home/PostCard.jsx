@@ -117,11 +117,15 @@ function RecipeReviewCard({
 					image={post.downloadURL}
 					title={post.postContent}
 				/>
-				<CardContent>
-					<Typography variant='body2' color='textSecondary' component='p'>
-						This impressive paella is a perfect party dish and a fun meal to
-						cook together with your guests. Add 1 cup of frozen peas along with
-						the mussels, if you like.
+				<CardContent style={{ textAlign: 'left' }}>
+					<Typography variant='body1' component='p'>
+						{post.postContent}
+					</Typography>
+					<Typography variant='body2' color='textSecondary'>
+						Posted By {post.author.displayName} on{' '}
+						{moment(new Date(post.createdAt._seconds * 1000)).format(
+							'MMMM Do YYYY'
+						)}
 					</Typography>
 				</CardContent>
 				<Divider style={{ margin: '0 5px' }} />
