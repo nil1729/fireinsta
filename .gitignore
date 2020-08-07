@@ -6,8 +6,11 @@
 .pnp.js
 
 config.js
+secret.json
 .env
-functions
+# functions
+.eslintrc.json
+firebase.debug.log
 .firebase
 .firebaserc
 
