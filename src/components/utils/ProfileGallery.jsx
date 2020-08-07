@@ -112,7 +112,7 @@ function CenteredTabs({ authState, userState }) {
 						</Typography>
 					) : tab === 'posts' ? (
 						posts.map(post => (
-							<GridListTile cols={1} key={post.id}>
+							<GridListTile cols={posts.length === 1 ? 3 : 1} key={post.id}>
 								<img
 									style={{ height: '100%', width: '100%' }}
 									src={post.downloadURL}
@@ -131,7 +131,9 @@ function CenteredTabs({ authState, userState }) {
 						</Typography>
 					) : (
 						likedPosts.map(post => (
-							<GridListTile cols={1} key={post.id}>
+							<GridListTile
+								cols={likedPosts.length === 1 ? 3 : 1}
+								key={post.id}>
 								<img
 									style={{ height: '100%', width: '100%' }}
 									src={post.downloadURL}

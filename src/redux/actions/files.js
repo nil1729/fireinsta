@@ -11,10 +11,8 @@ const uploadImageToStorage = ev => async dispatch => {
 		const user = firebase.auth().currentUser;
 		const storage = firebase.storage();
 		const extName = path.extname(ev.file.name);
-		const fileName = `${crypto
-			.randomBytes(15)
-			.toString('hex')
-			.toUpperCase()}${extName}`;
+		const fileOnlyName = crypto.randomBytes(15).toString('hex').toUpperCase();
+		const fileName = `${fileOnlyName}${extName}`;
 		const storageRef = storage.ref(`uploads/${user.uid}/${fileName}`);
 		const metadata = {
 			contentType: `${ev.file.type}`,
@@ -35,9 +33,10 @@ const uploadImageToStorage = ev => async dispatch => {
 			type: FILE_UPLOADED,
 			payload: {
 				downloadURL,
-				id: fileName,
+				id: fileOnlyName,
 				postContent: ev.postTitle,
 				likes: [],
+				comments: [],
 			},
 		});
 	} catch (e) {
