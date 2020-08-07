@@ -33,7 +33,12 @@ const uploadImageToStorage = ev => async dispatch => {
 		});
 		return dispatch({
 			type: FILE_UPLOADED,
-			payload: { downloadURL, id: fileName, postContent: ev.postTitle },
+			payload: {
+				downloadURL,
+				id: fileName,
+				postContent: ev.postTitle,
+				likes: [],
+			},
 		});
 	} catch (e) {
 		console.log(e);

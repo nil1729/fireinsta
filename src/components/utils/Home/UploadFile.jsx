@@ -156,6 +156,7 @@ function IconLabelButtons({
 				},
 				createdAt: { _seconds: Math.floor(new Date().getTime() / 1000) },
 				...fileState.file,
+				likes: [],
 			});
 		}
 		// eslint-disable-next-line
