@@ -23,6 +23,8 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { likePost } from '../../../redux/actions/users';
 import cryptoJS from 'crypto-js';
+import CommentIcon from '@material-ui/icons/Comment';
+import CommentDialog from './CommentDialog';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -73,7 +75,7 @@ function RecipeReviewCard({
 }) {
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
-
+	const [commentBox, setCommentBox] = useState(null);
 	const [authID, setAuthID] = useState('');
 
 	const handleExpandClick = () => {
@@ -137,9 +139,16 @@ function RecipeReviewCard({
 							<FavoriteIcon />
 						</IconButton>
 					) : null}
-
 					<IconButton color='primary' aria-label='share'>
 						<ShareIcon />
+					</IconButton>
+					<IconButton
+						onClick={() => {
+							setCommentBox(post);
+						}}
+						color='primary'
+						aria-label='share'>
+						<CommentIcon />
 					</IconButton>
 					{/* <IconButton
 						className={clsx(classes.expand, {
@@ -171,6 +180,12 @@ function RecipeReviewCard({
 						homePosts.map(post => <PostCard key={post.id} post={post} />)}
 				</Box>
 			)}
+			<CommentDialog
+				post={commentBox}
+				clearComment={() => {
+					setCommentBox(null);
+				}}
+			/>
 		</>
 	);
 }

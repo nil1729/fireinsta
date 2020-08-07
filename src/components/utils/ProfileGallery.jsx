@@ -68,6 +68,8 @@ function CenteredTabs({ authState, userState }) {
 	const { username } = useParams();
 	const [value, setValue] = useState(0);
 	const [posts, setPosts] = useState([]);
+	const [likedPosts, setLikedPosts] = useState([]);
+	const [tab, setTab] = useState('posts');
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
@@ -79,10 +81,16 @@ function CenteredTabs({ authState, userState }) {
 		) {
 			if (authState.details.posts) {
 				setPosts(authState.details.posts);
+				setLikedPosts(
+					authState.details.posts.filter(post => post.likes.length > 0)
+				);
 			}
 		} else if (userState.currentUser && userState.currentUser !== 'not-found') {
 			if (userState.currentUser.posts) {
 				setPosts(userState.currentUser.posts);
+				setLikedPosts(
+					userState.currentUser.posts.filter(post => post.likes.length > 0)
+				);
 			}
 		}
 		// eslint-disable-next-line
@@ -97,13 +105,32 @@ function CenteredTabs({ authState, userState }) {
 					cols={3}>
 					{posts.length === 0 ? (
 						<Typography
-							style={{ color: 'darkgrey' }}
+							style={{ color: 'darkgrey', display: 'contents' }}
 							variant='body1'
 							gutterBottom>
 							No Posts to show
 						</Typography>
-					) : (
+					) : tab === 'posts' ? (
 						posts.map(post => (
+							<GridListTile cols={1} key={post.id}>
+								<img
+									style={{ height: '100%', width: '100%' }}
+									src={post.downloadURL}
+									alt={username}
+								/>
+							</GridListTile>
+						))
+					) : likedPosts.length === 0 ? (
+						<Typography
+							style={{ color: 'darkgrey', display: 'contents' }}
+							variant='body1'
+							gutterBottom>
+							{username === authState.details.username
+								? `You Don't have any Liked Posts yet`
+								: `User has no Liked Posts yet`}
+						</Typography>
+					) : (
+						likedPosts.map(post => (
 							<GridListTile cols={1} key={post.id}>
 								<img
 									style={{ height: '100%', width: '100%' }}
@@ -142,8 +169,20 @@ function CenteredTabs({ authState, userState }) {
 								indicatorColor='secondary'
 								textColor='secondary'
 								centered>
-								<Tab label='Posts' icon={<AppsIcon />} />
-								<Tab label='Stars' icon={<FavoriteIcon />} />
+								<Tab
+									onClick={() => {
+										setTab('posts');
+									}}
+									label='Posts'
+									icon={<AppsIcon />}
+								/>
+								<Tab
+									onClick={() => {
+										setTab('starts');
+									}}
+									label='Stars'
+									icon={<FavoriteIcon />}
+								/>
 							</Tabs>
 						</Paper>
 						<TitlebarGridList />
