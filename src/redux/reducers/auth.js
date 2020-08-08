@@ -92,6 +92,14 @@ export default (state = initialState, action) => {
 					status: false,
 				},
 			};
+		case 'UPDATE_AUTH_FRIEND_LIST':
+			return {
+				...state,
+				details: {
+					...state.details,
+					friends: action.payload,
+				},
+			};
 		default: {
 			return state;
 		}

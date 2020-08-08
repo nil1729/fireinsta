@@ -139,30 +139,26 @@ const addComment = ev => async dispatch => {
 	}
 };
 
-const sendFriendRequest = ev => async dispatch => {
+const updateUserFriends = ev => async dispatch => {
 	try {
 		const authID = firebase.auth().currentUser.uid;
-		const { userID, req, friends } = ev;
-		let authFriends, userFriends;
-		if (!req) {
-			authFriends = friends.auth.following.filter(f => f != userID);
-			userFriends = friends.user.followers.filter(f => f != authID);
+		const { userID, friends } = ev;
+		let userFriends;
+		if (friends.followers.includes(authID)) {
+			userFriends = friends.followers.filter(f => f != authID);
 		} else {
-			userFriends = [...friends.user.followers, authID];
-			authFriends = [...friends.auth.following, userID];
+			userFriends = [...friends.followers, authID];
 		}
-		await firebase.firestore().collection('friends').doc(authID).set(
-			{
-				following: authFriends,
-			},
-			{ merge: true }
-		);
 		await firebase.firestore().collection('friends').doc(userID).set(
 			{
 				followers: userFriends,
 			},
 			{ merge: true }
 		);
+		return dispatch({
+			type: 'UPDATE_FRIEND_LIST',
+			payload: { ...friends, followers: userFriends },
+		});
 	} catch (e) {
 		console.log(e);
 	}
@@ -176,5 +172,5 @@ export {
 	newFileUpload,
 	likePost,
 	addComment,
-	sendFriendRequest,
+	updateUserFriends,
 };

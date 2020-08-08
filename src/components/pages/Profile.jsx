@@ -12,8 +12,8 @@ import IconButton from '@material-ui/core/IconButton';
 import { connect } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LinkSharpIcon from '@material-ui/icons/LinkSharp';
-import { setAuthAlert } from '../../redux/actions/auths';
-import { fetchProfile, sendFriendRequest } from '../../redux/actions/users';
+import { setAuthAlert, updateAuthFriends } from '../../redux/actions/auths';
+import { fetchProfile, updateUserFriends } from '../../redux/actions/users';
 import NotFound from './NotFound';
 import ProfileGallery from '../utils/ProfileGallery';
 import cryptoJS from 'crypto-js';
@@ -81,7 +81,8 @@ function SimpleContainer({
 	setAuthAlert,
 	fetchProfile,
 	userState,
-	sendFriendRequest,
+	updateUserFriends,
+	updateAuthFriends,
 	...rest
 }) {
 	const classes = useStyles();
@@ -133,17 +134,27 @@ function SimpleContainer({
 				);
 				let decryptedData = JSON.parse(bytes.toString(cryptoJS.enc.Utf8));
 				setCurrentUserID(decryptedData);
+				bytes = cryptoJS.AES.decrypt(authState.user.authID, 'Nilanjan Deb');
+				decryptedData = JSON.parse(bytes.toString(cryptoJS.enc.Utf8));
+				setAuthID(decryptedData);
+			} else if (userState.currentUser === 'not-found') {
+				setAuthAlert({
+					type: 'error',
+					messages: 'No User found with given username',
+				});
 			}
 		}
 		// eslint-disable-next-line
 	}, [authState.details, userState.currentUser, username]);
 	const sendFollowRequest = async () => {
-		let currentState = user.friends.followers.includes(authID);
 		setFriendLoading(true);
-		await sendFriendRequest({
-			req: !currentState,
+		await updateUserFriends({
 			userID: currentUserID,
-			friends: { user: user.friends, auth: authState.details.friends },
+			friends: user.friends,
+		});
+		await updateAuthFriends({
+			userID: currentUserID,
+			friends: authState.details.friends,
 		});
 		setFriendLoading(false);
 	};
@@ -210,7 +221,13 @@ function SimpleContainer({
 												disabled={friendLoading}
 												onClick={sendFollowRequest}
 												variant='outlined'
-												color='secondary'>
+												color={
+													currentUserID &&
+													user &&
+													user.friends.followers.includes(authID)
+														? 'secondary'
+														: 'primary'
+												}>
 												{currentUserID &&
 												user &&
 												user.friends.followers.includes(authID)
@@ -290,5 +307,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
 	setAuthAlert,
 	fetchProfile,
-	sendFriendRequest,
+	updateUserFriends,
+	updateAuthFriends,
 })(SimpleContainer);

@@ -86,6 +86,14 @@ export default (state = initialState, action) => {
 					} else return post;
 				}),
 			};
+		case 'UPDATE_FRIEND_LIST':
+			return {
+				...state,
+				currentUser: {
+					...state.currentUser,
+					friends: action.payload,
+				},
+			};
 		default:
 			return {
 				...state,

@@ -106,6 +106,31 @@ const sendUpdateReq = ev => async dispatch => {
 	}
 };
 
+const updateAuthFriends = ev => async dispatch => {
+	try {
+		const authID = firebase.auth().currentUser.uid;
+		const { userID, friends } = ev;
+		let authFriends;
+		if (friends.following.includes(userID)) {
+			authFriends = friends.following.filter(f => f != userID);
+		} else {
+			authFriends = [...friends.following, userID];
+		}
+		await firebase.firestore().collection('friends').doc(authID).set(
+			{
+				following: authFriends,
+			},
+			{ merge: true }
+		);
+		return dispatch({
+			type: 'UPDATE_AUTH_FRIEND_LIST',
+			payload: { ...friends, following: authFriends },
+		});
+	} catch (e) {
+		console.log(e);
+	}
+};
+
 export {
 	loadUser,
 	signOut,
@@ -113,4 +138,5 @@ export {
 	clearAuthAlerts,
 	updateProfile,
 	sendUpdateReq,
+	updateAuthFriends,
 };
