@@ -12,14 +12,14 @@ const composeEnhancers = composeWithDevTools({ trace: true });
 let store = createStore(
 	rootReducer,
 	initialState,
-	composeEnhancers(applyMiddleware(...middleware))
+	applyMiddleware(...middleware)
 );
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
 	store = createStore(
 		rootReducer,
 		initialState,
-		applyMiddleware(...middleware)
+		composeEnhancers(applyMiddleware(...middleware))
 	);
 }
 

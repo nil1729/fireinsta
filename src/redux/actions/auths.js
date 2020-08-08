@@ -18,11 +18,18 @@ const loadUser = () => async dispatch => {
 				).toString();
 				const callFetch = firebase.functions().httpsCallable('fetchProfile');
 				const res = await callFetch();
+
+				const friendSnap = await firebase
+					.firestore()
+					.collection('friends')
+					.doc(user.uid)
+					.get();
+				const friends = friendSnap.data();
 				return dispatch({
 					type: LOAD_USER,
 					payload: {
 						user: { ...user.providerData[0], authID: uid },
-						details: res.data,
+						details: { ...res.data, friends },
 					},
 				});
 			} else {

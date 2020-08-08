@@ -203,7 +203,7 @@ function IconLabelButtons({
 				fullWidth={true}
 				maxWidth='sm'
 				disableBackdropClick={loading}
-				disableEscapeKeyDown={loading}
+				disableEscapeKeyDown={true}
 				open={open}
 				TransitionComponent={Transition}
 				keepMounted

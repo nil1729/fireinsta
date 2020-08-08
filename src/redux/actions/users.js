@@ -11,6 +11,7 @@ import {
 
 import firebase from '../../firebase/firebaseApp';
 import crypto from 'crypto';
+import cryptoJS from 'crypto-js';
 
 const fetchProfile = ev => async dispatch => {
 	try {
@@ -24,9 +25,17 @@ const fetchProfile = ev => async dispatch => {
 		const res = await callFectchProfile({
 			username: ev,
 		});
+		const bytes = cryptoJS.AES.decrypt(res.data.id, 'Nilanjan Deb');
+		const userID = JSON.parse(bytes.toString(cryptoJS.enc.Utf8));
+		const friendSnap = await firebase
+			.firestore()
+			.collection('friends')
+			.doc(userID)
+			.get();
+		const friends = friendSnap.data();
 		return dispatch({
 			type: FETCH_PROFILE,
-			payload: { data: res.data, username: ev },
+			payload: { data: { ...res.data, friends }, username: ev },
 		});
 	} catch (e) {
 		console.log(e);
@@ -130,6 +139,35 @@ const addComment = ev => async dispatch => {
 	}
 };
 
+const sendFriendRequest = ev => async dispatch => {
+	try {
+		const authID = firebase.auth().currentUser.uid;
+		const { userID, req, friends } = ev;
+		let authFriends, userFriends;
+		if (!req) {
+			authFriends = friends.auth.following.filter(f => f != userID);
+			userFriends = friends.user.followers.filter(f => f != authID);
+		} else {
+			userFriends = [...friends.user.followers, authID];
+			authFriends = [...friends.auth.following, userID];
+		}
+		await firebase.firestore().collection('friends').doc(authID).set(
+			{
+				following: authFriends,
+			},
+			{ merge: true }
+		);
+		await firebase.firestore().collection('friends').doc(userID).set(
+			{
+				followers: userFriends,
+			},
+			{ merge: true }
+		);
+	} catch (e) {
+		console.log(e);
+	}
+};
+
 export {
 	fetchProfile,
 	fetchHomeUsers,
@@ -138,4 +176,5 @@ export {
 	newFileUpload,
 	likePost,
 	addComment,
+	sendFriendRequest,
 };

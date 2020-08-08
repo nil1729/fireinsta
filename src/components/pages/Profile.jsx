@@ -13,9 +13,10 @@ import { connect } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LinkSharpIcon from '@material-ui/icons/LinkSharp';
 import { setAuthAlert } from '../../redux/actions/auths';
-import { fetchProfile } from '../../redux/actions/users';
+import { fetchProfile, sendFriendRequest } from '../../redux/actions/users';
 import NotFound from './NotFound';
 import ProfileGallery from '../utils/ProfileGallery';
+import cryptoJS from 'crypto-js';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -80,13 +81,16 @@ function SimpleContainer({
 	setAuthAlert,
 	fetchProfile,
 	userState,
+	sendFriendRequest,
 	...rest
 }) {
 	const classes = useStyles();
 	const history = useHistory();
 	const { username } = useParams();
 	const [user, setUser] = useState(null);
-
+	const [currentUserID, setCurrentUserID] = useState(null);
+	const [authID, setAuthID] = useState(null);
+	const [friendLoading, setFriendLoading] = useState(false);
 	useEffect(() => {
 		if (!authState.loading && !authState.details.username) {
 			setAuthAlert({
@@ -117,8 +121,32 @@ function SimpleContainer({
 		} else if (userState.currentUser && userState.currentUser !== 'not-found') {
 			setUser(userState.currentUser);
 		}
+		if (
+			!authState.loading &&
+			username !== authState.details.username &&
+			userState.currentUser
+		) {
+			if (userState.currentUser !== 'not-found') {
+				let bytes = cryptoJS.AES.decrypt(
+					userState.currentUser.id,
+					'Nilanjan Deb'
+				);
+				let decryptedData = JSON.parse(bytes.toString(cryptoJS.enc.Utf8));
+				setCurrentUserID(decryptedData);
+			}
+		}
 		// eslint-disable-next-line
 	}, [authState.details, userState.currentUser, username]);
+	const sendFollowRequest = async () => {
+		let currentState = user.friends.followers.includes(authID);
+		setFriendLoading(true);
+		await sendFriendRequest({
+			req: !currentState,
+			userID: currentUserID,
+			friends: { user: user.friends, auth: authState.details.friends },
+		});
+		setFriendLoading(false);
+	};
 	return (
 		<React.Fragment>
 			<CssBaseline />
@@ -140,7 +168,7 @@ function SimpleContainer({
 									<img
 										className={classes.dpStyle}
 										src={user && user.photoURL}
-										alt=''
+										alt='Something'
 									/>
 								</Container>
 							</Grid>
@@ -179,9 +207,15 @@ function SimpleContainer({
 													margin: '0 10px 0 1.2rem ',
 													fontSize: '0.75rem',
 												}}
+												disabled={friendLoading}
+												onClick={sendFollowRequest}
 												variant='outlined'
 												color='secondary'>
-												Follow
+												{currentUserID &&
+												user &&
+												user.friends.followers.includes(authID)
+													? 'Following'
+													: 'Follow'}
 											</Button>
 										)}
 									</div>
@@ -199,13 +233,13 @@ function SimpleContainer({
 											style={{ margin: '0 2rem' }}
 											variant='h6'
 											gutterBottom>
-											0 followers
+											{user && user.friends.followers.length} followers
 										</Typography>
 										<Typography
 											className={classes.stats}
 											variant='h6'
 											gutterBottom>
-											0 following
+											{user && user.friends.following.length} following
 										</Typography>
 									</div>
 								</Box>
@@ -253,6 +287,8 @@ const mapStateToProps = state => ({
 	userState: state.USERS,
 });
 
-export default connect(mapStateToProps, { setAuthAlert, fetchProfile })(
-	SimpleContainer
-);
+export default connect(mapStateToProps, {
+	setAuthAlert,
+	fetchProfile,
+	sendFriendRequest,
+})(SimpleContainer);

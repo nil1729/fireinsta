@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const path = require('path');
 const admin = require('firebase-admin');
 const serviceAccount = require('./secret.json');
+const cryptoJS = require('crypto-js');
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
@@ -27,6 +28,11 @@ exports.newUserSignUp = functions.auth.user().onCreate(async user => {
 		createdAt: createTimestamp(),
 		updatedAt: createTimestamp(),
 	});
+	await firestore.collection('friends').doc(user.uid).set({
+		followers: [],
+		following: [],
+	});
+	return null;
 });
 
 exports.userDelete = functions.auth.user().onDelete(async user => {
@@ -183,6 +189,10 @@ exports.fetchViewProfile = functions.https.onCall(async (data, context) => {
 			bio: data.bio,
 			username: data.username,
 			photoURL: data.photoURL,
+			id: cryptoJS.AES.encrypt(
+				JSON.stringify(doc.id),
+				'Nilanjan Deb'
+			).toString(),
 		};
 	});
 	const postsRes = await firestore

@@ -158,7 +158,7 @@ function CenteredTabs({ authState, userState }) {
 		<>
 			<CssBaseline />
 			<Container className={classes.container} maxWidth='lg'>
-				<Divider />
+				{userState.currentUser === 'not-found' ? null : <Divider />}
 				{userState.loading ? (
 					<LinearProgress style={{ marginTop: '3rem' }} color='secondary' />
 				) : userState.currentUser === 'not-found' &&

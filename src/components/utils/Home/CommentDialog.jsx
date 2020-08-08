@@ -132,6 +132,8 @@ function CommentDialog({
 				fullWidth
 				maxWidth='md'
 				open={open}
+				disableBackdropClick={false}
+				disableEscapeKeyDown={true}
 				TransitionComponent={Transition}
 				keepMounted
 				onClose={handleClose}
