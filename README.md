@@ -7,7 +7,7 @@ A Simple Try to build a full stack functional app. INSTAGRAM CLONE using React, 
 
 ---
 
-### Modules used for this Project
+### Technology and Modules used for this Project
 
 1. _`Firebase Functions`_ is used as a building Backend part of this Website.
 2. _`Firebase Firestore`_ is used for Database to store Data.
