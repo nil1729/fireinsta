@@ -118,14 +118,14 @@ function InteractiveList({ homeUsers, loading, ...rest }) {
 													primary={user.displayName}
 												/>
 											</Box>
-											<ListItemSecondaryAction>
+											{/* <ListItemSecondaryAction>
 												<Typography
 													className={classes.followText}
 													variant='caption'
 													gutterBottom>
 													Follow
 												</Typography>
-											</ListItemSecondaryAction>
+											</ListItemSecondaryAction> */}
 										</ListItem>
 									))}
 							</List>

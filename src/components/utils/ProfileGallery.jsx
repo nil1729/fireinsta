@@ -30,16 +30,19 @@ const useStyles = makeStyles(theme => ({
 	imgRoot: {
 		display: 'flex',
 		flexWrap: 'wrap',
-		justifyContent: 'space-around',
+		// justifyContent: 'space-around',
 		marginTop: '10px',
 		backgroundColor: theme.palette.background.paper,
 	},
 	gridList: {
-		width: 'auto',
+		width: '100%',
 		padding: '2rem',
 	},
 	icon: {
 		color: 'rgba(255, 255, 255, 0.54)',
+	},
+	listRoot: {
+		width: 'auto',
 	},
 	coverStyle: {
 		position: 'absolute',
@@ -112,7 +115,7 @@ function CenteredTabs({ authState, userState }) {
 						</Typography>
 					) : tab === 'posts' ? (
 						posts.map(post => (
-							<GridListTile cols={posts.length === 1 ? 3 : 1} key={post.id}>
+							<GridListTile cols={1} key={post.id}>
 								<img
 									style={{ height: '100%', width: '100%' }}
 									src={post.downloadURL}
@@ -131,9 +134,7 @@ function CenteredTabs({ authState, userState }) {
 						</Typography>
 					) : (
 						likedPosts.map(post => (
-							<GridListTile
-								cols={likedPosts.length === 1 ? 3 : 1}
-								key={post.id}>
+							<GridListTile cols={1} key={post.id}>
 								<img
 									style={{ height: '100%', width: '100%' }}
 									src={post.downloadURL}
