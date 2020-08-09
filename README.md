@@ -14,7 +14,7 @@ A Simple Try to build a full stack functional app. INSTAGRAM CLONE using React, 
 3. _`Firebase Storage`_ is used for store the Uploaded Files.
 4. _`firebase Authentication`_ is used for for Authenticate a User, Now I use only Google Sign-in Provider.
 5. _`React JS`_ is used as frontend Framework for building SPA.
-6. _`Material UI`_ is used as CSS Framework and the website is Responsive for Desktop Devices and Tabs only.
+6. _`Material UI`_ is used for building React Components and this website is Responsive for Desktop Devices and Tabs only.
 7. _`Crypto-Js`_ is used for encrypting some Information Data.
 
 ---

@@ -22,7 +22,10 @@ function Copyright() {
 	return (
 		<Typography variant='body2' color='textSecondary' align='center'>
 			{'Copyright © '}
-			<Link color='inherit' target='_blank' href='https://github.com/nil1729'>
+			<Link
+				color='inherit'
+				target='_blank'
+				href='https://github.com/nil1729/instagram-clone'>
 				Nilanjan Deb
 			</Link>{' '}
 			{new Date().getFullYear()}
