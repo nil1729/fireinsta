@@ -145,7 +145,7 @@ const updateUserFriends = ev => async dispatch => {
 		const { userID, friends } = ev;
 		let userFriends;
 		if (friends.followers.includes(authID)) {
-			userFriends = friends.followers.filter(f => f != authID);
+			userFriends = friends.followers.filter(f => f !== authID);
 		} else {
 			userFriends = [...friends.followers, authID];
 		}

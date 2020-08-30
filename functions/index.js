@@ -236,18 +236,13 @@ exports.fetchHomeUser = functions.https.onCall(async (data, context) => {
 	return users;
 });
 
-exports.uploadImageToStorage = functions.storage
-	.object()
-	.onFinalize(async file => {
-		const downloadURL = `${file.mediaLink.replace(
-			'https://www.googleapis.com/download/storage/v1',
-			'https://firebasestorage.googleapis.com/v0'
-		)}&token=${file.metadata.firebaseStorageDownloadTokens}`;
-		const fileID = path.basename(file.name, path.extname(file.name));
-		const userID = file.name.split('/')[1];
+exports.saveImageDataToDB = functions.https.onCall(async (data, context) => {
+	try {
+		const { downloadURL, postContent, fileID } = data;
+		const userID = context.auth.uid;
 		const userSnap = await firestore.collection('users').doc(userID).get();
 		const user = userSnap.data();
-		return firestore
+		await firestore
 			.collection('posts')
 			.doc(fileID)
 			.set({
@@ -259,11 +254,15 @@ exports.uploadImageToStorage = functions.storage
 					photoURL: user.photoURL,
 				},
 				createdAt: createTimestamp(),
-				postContent: file.metadata['Post Content'],
+				postContent,
 				likes: [],
 				comments: [],
 			});
-	});
+		return 'uploaded';
+	} catch (e) {
+		return e;
+	}
+});
 
 exports.fetchAllPosts = functions.https.onCall(async (data, context) => {
 	try {

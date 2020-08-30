@@ -22,23 +22,34 @@ const uploadImageToStorage = ev => async dispatch => {
 		};
 		await storageRef.put(ev.file, metadata);
 		const downloadURL = await storageRef.getDownloadURL();
-		dispatch({
-			type: 'AUTH_ALERTS',
-			payload: {
-				type: 'success',
-				message: 'Image Uploaded Successfully',
-			},
+		const callSaveImageDataToDB = firebase
+			.functions()
+			.httpsCallable('saveImageDataToDB');
+		const res = await callSaveImageDataToDB({
+			downloadURL,
+			postContent: ev.postTitle,
+			fileID: fileOnlyName,
 		});
-		return dispatch({
-			type: FILE_UPLOADED,
-			payload: {
-				downloadURL,
-				id: fileOnlyName,
-				postContent: ev.postTitle,
-				likes: [],
-				comments: [],
-			},
-		});
+
+		if (res.data === 'uploaded') {
+			dispatch({
+				type: 'AUTH_ALERTS',
+				payload: {
+					type: 'success',
+					message: 'Image Uploaded Successfully',
+				},
+			});
+			return dispatch({
+				type: FILE_UPLOADED,
+				payload: {
+					downloadURL,
+					id: fileOnlyName,
+					postContent: ev.postTitle,
+					likes: [],
+					comments: [],
+				},
+			});
+		}
 	} catch (e) {
 		console.log(e);
 	}
