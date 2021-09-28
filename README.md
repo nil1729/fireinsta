@@ -1,4 +1,4 @@
-# Social_Media_Site (Useing Firebase Cloud Functions)
+# Social_Media_Site (Using Firebase Cloud Functions)
 
 A Simple Try to build a full stack functional app. INSTAGRAM CLONE using React, Firebase &amp; Material-UI.
 
